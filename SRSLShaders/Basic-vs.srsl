@@ -1,0 +1,16 @@
+ShaderType = Vertex;
+
+Input vsIn{
+    float3 position: Position;
+    float2 texCoords: TexCoords;
+};
+
+Output vsOut{
+    float4 position: SRV_POSITION;
+    float2 texCoords: TexCoords;
+};
+
+void main(){
+    vsOut.position = float4(vsIn.position, 1.0);
+    vsOut.texCoords = vsIn.texCoords;
+}
