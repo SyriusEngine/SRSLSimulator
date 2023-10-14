@@ -22,7 +22,7 @@ void compile(const std::string& vertex, const std::string& fragment, const std::
 
 int main(int argc, char** argv) {
     try {
-        compile("SRSLShaders/Basic-vs.srsl", "SRSLShaders/Basic-fs.srsl", "runtime/Basic");
+        compile("SRSLShaders/Basic-vs.srsl", "SRSLShaders/Basic-fs.srsl", "Execute/Basic");
 
     } catch (std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;

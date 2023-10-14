@@ -10,6 +10,14 @@ Output vsOut{
     float2 texCoords: TexCoords;
 };
 
+float function_for_loop(int n){
+    float result = 1.0;
+    for(int i = 0; i < n; i++){
+        result = result *  i;
+    }
+    return result;
+}
+
 void main(){
     vsOut.position = float4(vsIn.position, 1.0);
     vsOut.texCoords = vsIn.texCoords;
