@@ -15,7 +15,6 @@ link_directories(./cmake-build-debug/SyriusShadingLanguage/)
 
 set(SRSL_RUNTIME_SRC
         Execute/Basic-vs.cpp
-        Execute/Basic-fs.cpp
         src/SRSLRuntime/Environment.cpp)
 
 add_executable(SrslRuntime ${SRSL_RUNTIME_SRC} src/SRSLRuntime/RuntimeMain.cpp)
