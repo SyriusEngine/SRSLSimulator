@@ -12,7 +12,7 @@
 
 #pragma once
 
-// include
+// Dependencies
 #include "../ext/scalar_uint_sized.hpp"
 #include "../detail/setup.hpp"
 

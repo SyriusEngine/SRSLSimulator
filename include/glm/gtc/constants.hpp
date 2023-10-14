@@ -12,7 +12,7 @@
 
 #pragma once
 
-// include
+// Dependencies
 #include "../ext/scalar_constants.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)

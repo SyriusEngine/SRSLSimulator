@@ -15,7 +15,7 @@
 
 #pragma once
 
-// include
+// Dependencies
 #include "../ext/scalar_int_sized.hpp"
 #include "../ext/scalar_uint_sized.hpp"
 #include "../detail/qualifier.hpp"

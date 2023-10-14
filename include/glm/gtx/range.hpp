@@ -12,7 +12,7 @@
 
 #pragma once
 
-// include
+// Dependencies
 #include "../detail/setup.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)

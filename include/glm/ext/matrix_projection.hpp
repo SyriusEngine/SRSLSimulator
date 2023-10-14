@@ -19,7 +19,7 @@
 
 #pragma once
 
-// include
+// Dependencies
 #include "../gtc/constants.hpp"
 #include "../geometric.hpp"
 #include "../trigonometric.hpp"

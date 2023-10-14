@@ -12,7 +12,7 @@
 
 #pragma once
 
-// include
+// Dependencies
 #include "../detail/setup.hpp"
 #include "../matrix.hpp"
 #include "../mat2x2.hpp"

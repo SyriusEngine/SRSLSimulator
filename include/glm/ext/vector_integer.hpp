@@ -11,7 +11,7 @@
 
 #pragma once
 
-// include
+// Dependencies
 #include "../detail/setup.hpp"
 #include "../detail/qualifier.hpp"
 #include "../detail/_vectorize.hpp"

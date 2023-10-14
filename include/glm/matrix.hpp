@@ -12,7 +12,7 @@
 
 #pragma once
 
-// include
+// Dependencies
 #include "detail/qualifier.hpp"
 #include "detail/setup.hpp"
 #include "vec2.hpp"

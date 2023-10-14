@@ -13,9 +13,12 @@ include_directories(./SyriusShadingLanguage/include/)
 link_directories(./cmake-build-debug/)
 link_directories(./cmake-build-debug/SyriusShadingLanguage/)
 
-#set(SRSL_RUNTIME_SRC )
-#
-#add_library(SrslRuntime SHARED ${SRSL_RUNTIME_SRC})
+set(SRSL_RUNTIME_SRC
+        Execute/Basic-vs.cpp
+        Execute/Basic-fs.cpp
+        src/SRSLRuntime/Environment.cpp)
+
+add_executable(SrslRuntime ${SRSL_RUNTIME_SRC} src/SRSLRuntime/RuntimeMain.cpp)
 
 add_executable(SRSLSimulator main.cpp)
 target_link_libraries(SRSLSimulator -lSrslCompiler)
