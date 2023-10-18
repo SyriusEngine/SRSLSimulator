@@ -7,7 +7,6 @@ namespace SrslGenerator{
     struct SRSL_GEN_API GeneratorDesc{
         std::string vertexShaderPath;
         std::string fragmentShaderPath;
-        std::string outputDirectory;
         bool exportASTAsDot = false;
         bool exportSymbolTableAsHtml = false;
     };

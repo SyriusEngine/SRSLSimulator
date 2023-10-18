@@ -5,9 +5,8 @@
 int main(int argc, char** argv) {
     try {
         SrslGenerator::GeneratorDesc desc;
-        desc.outputDirectory = "SRSLShaders/Basic-vs.srsl";
-        desc.vertexShaderPath = "SRSLShaders/Basic-fs.srsl";
-        desc.fragmentShaderPath = "src/SRSLRuntime/Shader/Basic";
+        desc.vertexShaderPath = "./SRSLShaders/Basic-vs.srsl";
+        desc.fragmentShaderPath = "./SRSLShaders/Basic-fs.srsl";
         SrslGenerator::generateExecutable(desc);
 
     } catch (std::exception& e) {

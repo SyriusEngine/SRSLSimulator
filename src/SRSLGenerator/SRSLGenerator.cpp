@@ -7,18 +7,18 @@ namespace SrslGenerator{
     void compileProgram(const GeneratorDesc& desc){
         auto vsm = createShaderModule(desc.vertexShaderPath);
         if(desc.exportASTAsDot){
-            vsm->exportAstDot(desc.outputDirectory + "/VSM.dot");
+            vsm->exportAstDot("VSM.dot");
         }
         if(desc.exportSymbolTableAsHtml){
-            vsm->exportSymbolTableHtml(desc.outputDirectory + "/VSM.html");
+            vsm->exportSymbolTableHtml("VSM.html");
         }
 
         auto fsm = createShaderModule(desc.fragmentShaderPath);
         if(desc.exportASTAsDot){
-            fsm->exportAstDot(desc.outputDirectory + "-FSM.dot");
+            fsm->exportAstDot("FSM.dot");
         }
         if(desc.exportSymbolTableAsHtml){
-            fsm->exportSymbolTableHtml(desc.outputDirectory + "-FSM.html");
+            fsm->exportSymbolTableHtml("FSM.html");
         }
 
         auto program = createShaderProgram();
@@ -27,14 +27,27 @@ namespace SrslGenerator{
         program->link();
 
         CppDescriptor cppDesc;
-        cppDesc.outputFile = desc.outputDirectory;
+        cppDesc.outputFile = "./src/SRSLRuntime/Shader/comp.cpp";
         program->exportCpp(cppDesc);
 
         delete program;
     }
 
+    std::string generateCommand(){
+        std::string base = "g++ ";
+        std::string glmInclude = "-I./Dependencies/glm ";
+        std::string outputLocation = "-o ./cmake-build-debug/SRSLRuntime.exe ";
+
+        std::string sourceFiles = "./src/SRSLRuntime/Shader/comp-vs.cpp ";
+        sourceFiles += "./src/SRSLRuntime/Shader/comp-fs.cpp ";
+
+
+        return base + glmInclude + outputLocation + sourceFiles;
+    }
+
     void generateExecutable(const GeneratorDesc& desc){
         compileProgram(desc);
-
+        auto cmd = generateCommand();
+        system(cmd.c_str());
     }
 }
