@@ -7,16 +7,19 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(SyriusShadingLanguage)
 
-include_directories(Dependencies/)
+include_directories(./Dependencies/)
 include_directories(./SyriusShadingLanguage/include/)
 
 link_directories(./cmake-build-debug/)
 link_directories(./cmake-build-debug/SyriusShadingLanguage/)
 
-set(SRSL_RUNTIME_SRC
-        src/SRSLRuntime/Environment.cpp)
+set(SRSL_GENERATOR_SRC
+    src/SRSLGenerator/SRSLGenerator.cpp )
 
-add_executable(SrslRuntime ${SRSL_RUNTIME_SRC} src/SRSLRuntime/RuntimeMain.cpp)
+add_library(SrslGenerator SHARED ${SRSL_GENERATOR_SRC})
+target_link_libraries(SrslGenerator -lSrslCompiler)
 
-add_executable(SRSLSimulator main.cpp)
-target_link_libraries(SRSLSimulator -lSrslCompiler)
+set(SRSL_SIMULATOR_SRC)
+
+add_executable(SrslSimulator ${SRSL_SIMULATOR_SRC} main.cpp)
+target_link_libraries(SrslSimulator -lSrslGenerator)
