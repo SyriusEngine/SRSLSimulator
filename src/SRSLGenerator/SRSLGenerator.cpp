@@ -35,7 +35,7 @@ namespace SrslGenerator{
 
     std::string generateCommand(){
         std::string base = "g++ ";
-        std::string glmInclude = "-I./Dependencies/glm ";
+        std::string glmInclude = "-I./Dependencies ";
         std::string outputLocation = "-o ./cmake-build-debug/SRSLRuntime.exe ";
 
         std::string sourceFiles = "./src/SRSLRuntime/Shader/comp-vs.cpp ";
