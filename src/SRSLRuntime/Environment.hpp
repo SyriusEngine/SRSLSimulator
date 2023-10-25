@@ -6,20 +6,11 @@
 
 namespace SrslRuntime{
 
-    struct InterfaceDataDesc{
-        void* data = nullptr;
-        size_t size = 0; // size of the array in bytes (essentially multiple vertices)
-        size_t stride = 0; // size of a single element in bytes (essentially a single vertex)
-    };
-
     class Environment{
     public:
-        Environment();
+        explicit Environment(const std::string& dataFile);
 
-        void execute(const InterfaceDataDesc& inputData, InterfaceDataDesc& outputData);
-
-    private:
-
+        ~Environment();
     };
 
 }

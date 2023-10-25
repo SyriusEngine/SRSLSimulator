@@ -38,7 +38,11 @@ namespace SrslGenerator{
         std::string glmInclude = "-I./Dependencies ";
         std::string outputLocation = "-o ./cmake-build-debug/SRSLRuntime.exe ";
 
-        std::string sourceFiles = "./src/SRSLRuntime/Shader/comp-vs.cpp ";
+        std::string sourceFiles;
+
+        // we always want to know the output file name of the SRSLCompiler.
+        // makes including the compiled shader in the project easier.
+        sourceFiles += "./src/SRSLRuntime/Shader/comp-vs.cpp ";
         sourceFiles += "./src/SRSLRuntime/Shader/comp-fs.cpp ";
 
 
