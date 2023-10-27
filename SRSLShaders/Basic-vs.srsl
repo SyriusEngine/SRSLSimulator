@@ -2,43 +2,12 @@ ShaderType = Vertex;
 
 Input vsIn{
     float3 position: Position;
-    float3 normal: Normal;
-    float2 texCoords: TexCoords;
-    uint texIndex: TexIndex;
 };
 
 Output vsOut{
     float4 position: SRV_POSITION;
-    float4 normal: Normal;
-    float2 texCoords: TexCoords;
-    uint texIndex: TexIndex;
 };
-
-ConstantBuffer(slot = 0) modelData{
-    float4x4 model;
-    float4x4 modelInvTranspose;
-};
-
-ConstantBuffer(slot = 1) viewData{
-    float4x4 view;
-    float4 cameraPos;
-};
-
-ConstantBuffer(slot = 2) projectionData{
-    float4x4 perspective;
-};
-
-uint calculateTexIndex(uint texIndex){
-    for (int i = 0; i < texIndex; i++){
-        texIndex = texIndex + i;
-    }
-    return texIndex;
-}
-
 
 void main(){
-    vsOut.position = projectionData.perspective * viewData.view * modelData.model * float4(vsIn.position, 1.0f);
-    vsOut.normal = modelData.modelInvTranspose * float4(vsIn.normal, 0.0f);
-    vsOut.texCoords = vsIn.texCoords;
-    vsOut.texIndex = calculateTexIndex(vsIn.texIndex);
+    vsOut.position = float4(vsIn.position, 1.0);
 }
