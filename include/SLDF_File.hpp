@@ -15,7 +15,34 @@ namespace SrslSimulator{
 
     class DataFrame{
     public:
-        DataFrame(const std::string& name, SLDF_DATA_TYPE type):
+        explicit DataFrame(std::ifstream& file){
+            // read the header
+            char header[24];
+            file.read(header, 24);
+            m_Version = std::string(header, 6);
+            m_Type = static_cast<SLDF_DATA_TYPE>(header[6]);
+            // read the Semantic size from the header
+            uint64_t nameSize;
+            memcpy(&nameSize, header + 7, 8);
+            memcpy(&m_DataSize, header + 15, 8);
+
+            // read the semantic name from the file
+            char* name = new char[nameSize];
+            file.read(name, nameSize);
+            m_Name = std::string(name, nameSize);
+            delete[] name;
+
+            // read the data from the file
+            m_Data = std::make_unique<char[]>(m_DataSize);
+            file.read(m_Data.get(), m_DataSize);
+
+            // read the next frame
+            if (file.peek() != EOF){
+                m_NextFrame = std::make_unique<DataFrame>(file);
+            }
+        }
+
+        explicit DataFrame(const std::string& name, SLDF_DATA_TYPE type):
         m_Name(name),
         m_Type(type),
         m_Version("SLDF10"),
@@ -79,6 +106,15 @@ namespace SrslSimulator{
             }
         }
 
+        std::unique_ptr<DataFrame>& getFrame(const std::string& name){
+            if (m_NextFrame->m_Name == name){
+                return m_NextFrame;
+            }
+            else{
+                return m_NextFrame->getFrame(name);
+            }
+        }
+
     private:
         std::string m_Version;
         std::string m_Name;
@@ -97,7 +133,7 @@ namespace SrslSimulator{
             if (!file.is_open()) {
                 throw std::runtime_error("Could not open file: " + dataFile);
             }
-
+            m_FirstFrame = std::make_unique<DataFrame>(file);
         }
 
         ~SLDF_File(){
@@ -121,6 +157,15 @@ namespace SrslSimulator{
             }
             if (m_FirstFrame != nullptr){
                 m_FirstFrame->save(file);
+            }
+        }
+
+        std::unique_ptr<DataFrame>& getFrame(const std::string& name){
+            if (m_FirstFrame->getName() == name){
+                return m_FirstFrame;
+            }
+            else{
+                return m_FirstFrame->getFrame(name);
             }
         }
 

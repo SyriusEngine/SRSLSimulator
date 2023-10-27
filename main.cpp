@@ -45,6 +45,11 @@ int main(int argc, char** argv) {
 
         f.save("test.sldf");
 
+        SrslSimulator::SLDF_File reader("test.sldf");
+
+        auto& ipFrame = reader.getFrame("input");
+        auto& pData = reader.getFrame("Projection");
+
 
 //        SrslGenerator::GeneratorDesc desc;
 //        desc.vertexShaderPath = "./SRSLShaders/Basic-vs.srsl";
