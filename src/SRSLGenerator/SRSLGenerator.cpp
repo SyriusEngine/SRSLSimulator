@@ -33,10 +33,10 @@ namespace SrslGenerator{
         delete program;
     }
 
-    std::string generateCommand(){
+    std::string generateCommand(const GeneratorDesc& desc){
         std::string base = "g++ ";
         std::string glmInclude = "-I./Dependencies ";
-        std::string outputLocation = "-o ./cmake-build-debug/SRSLRuntime.exe ";
+        std::string outputLocation = "-o " + desc.executableName;
 
         std::string sourceFiles;
 
@@ -51,7 +51,7 @@ namespace SrslGenerator{
 
     void generateExecutable(const GeneratorDesc& desc){
         compileProgram(desc);
-        auto cmd = generateCommand();
+        auto cmd = generateCommand(desc);
         system(cmd.c_str());
     }
 }

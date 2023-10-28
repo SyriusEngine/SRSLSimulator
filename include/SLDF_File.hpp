@@ -11,7 +11,7 @@ typedef enum SLDF_DATA_TYPE: uint8_t{
     SLDF_TEXTURE = 0x04,
 } SLDF_DATA_TYPE;
 
-namespace SrslSimulator{
+namespace sldf{
 
     class DataFrame{
     public:

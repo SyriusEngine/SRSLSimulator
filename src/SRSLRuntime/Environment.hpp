@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "../../include/SLDF_File.hpp"
 
 namespace SrslRuntime{
 
@@ -12,6 +13,9 @@ namespace SrslRuntime{
         explicit Environment(const std::string& dataFile);
 
         ~Environment();
+
+    private:
+        sldf::SLDF_File m_File;
     };
 
 }
