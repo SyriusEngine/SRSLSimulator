@@ -115,6 +115,15 @@ namespace sldf{
             }
         }
 
+        std::unique_ptr<DataFrame>& getFrameByType(const SLDF_DATA_TYPE type){
+            if (m_NextFrame->getType() == type){
+                return m_NextFrame;
+            }
+            else{
+                return m_NextFrame->getFrameByType(type);
+            }
+        }
+
     private:
         std::string m_Version;
         std::string m_Name;
@@ -166,6 +175,15 @@ namespace sldf{
             }
             else{
                 return m_FirstFrame->getFrame(name);
+            }
+        }
+
+        std::unique_ptr<DataFrame>& getFrameByType(const SLDF_DATA_TYPE type){
+            if (m_FirstFrame->getType() == type){
+                return m_FirstFrame;
+            }
+            else{
+                return m_FirstFrame->getFrameByType(type);
             }
         }
 

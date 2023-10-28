@@ -13,6 +13,8 @@ namespace SrslRuntime{
         void execute();
 
     private:
+
+    private:
         Environment* m_Environment;
     };
 

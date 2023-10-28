@@ -14,8 +14,10 @@ namespace SrslRuntime{
 
         ~Environment();
 
+    public:
+        sldf::SLDF_File m_SLDFFile;
+
     private:
-        sldf::SLDF_File m_File;
     };
 
 }
