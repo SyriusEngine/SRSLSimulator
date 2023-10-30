@@ -1,6 +1,6 @@
 ShaderType = Fragment;
 
-Input vsOut{
+Input fsIn{
     float4 position: SRV_POSITION;
 };
 

@@ -4,7 +4,7 @@
 namespace SrslRuntime{
 
     Environment::Environment(const std::string &dataFile):
-    m_File(dataFile){
+    m_SLDFFile(dataFile){
 
     }
 

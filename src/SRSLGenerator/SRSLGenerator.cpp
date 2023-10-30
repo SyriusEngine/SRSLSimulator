@@ -36,9 +36,12 @@ namespace SrslGenerator{
     std::string generateCommand(const GeneratorDesc& desc){
         std::string base = "g++ ";
         std::string glmInclude = "-I./Dependencies ";
-        std::string outputLocation = "-o " + desc.executableName;
+        std::string outputLocation = "-o " + desc.executableName + " ";
 
         std::string sourceFiles;
+        sourceFiles += "./src/SRSLRuntime/Environment.cpp ";
+        sourceFiles += "./src/SRSLRuntime/Runtime.cpp ";
+        sourceFiles += "./src/SRSLRuntime/RuntimeMain.cpp ";
 
         // we always want to know the output file name of the SRSLCompiler.
         // makes including the compiled shader in the project easier.

@@ -23,3 +23,19 @@ set(SRSL_SIMULATOR_SRC)
 
 add_executable(SrslSimulator ${SRSL_SIMULATOR_SRC} main.cpp)
 target_link_libraries(SrslSimulator -lSrslGenerator)
+
+
+
+
+###########################################################################
+
+# TEMPORARY EXECUTABLE FOR TESTING
+
+###########################################################################
+
+add_executable(SRSLRuntimeTest
+    src/SRSLRuntime/RuntimeMain.cpp
+    src/SRSLRuntime/Runtime.cpp
+    src/SRSLRuntime/Environment.cpp
+    src/SRSLRuntime/Shader/comp-vs.cpp
+    src/SRSLRuntime/Shader/comp-fs.cpp)
