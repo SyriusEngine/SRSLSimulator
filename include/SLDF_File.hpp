@@ -5,13 +5,18 @@
 #include <memory>
 
 typedef enum SLDF_DATA_TYPE: uint8_t{
-    SLDF_INPUT = 0x01,
-    SLDF_OUTPUT = 0x02,
+    SLDF_VERTEX_DATA = 0x01,
+    SLDF_INDEX_DATA = 0x02,
     SLDF_CONSTANT_BUFFER = 0x03,
     SLDF_TEXTURE = 0x04,
 } SLDF_DATA_TYPE;
 
 namespace sldf{
+
+    struct ValidationContext{
+        bool foundVertexData = false;
+        bool foundIndexData = false;
+    };
 
     class DataFrame{
     public:
@@ -124,6 +129,24 @@ namespace sldf{
             }
         }
 
+        void validate(ValidationContext& ctx){
+            if (m_Type == SLDF_VERTEX_DATA){
+                if (ctx.foundVertexData){
+                    throw std::runtime_error("SLDF file contains multiple vertex data frames");
+                }
+                ctx.foundVertexData = true;
+            }
+            else if (m_Type == SLDF_INDEX_DATA){
+                if (ctx.foundIndexData){
+                    throw std::runtime_error("SLDF file contains multiple fragment data frames");
+                }
+                ctx.foundIndexData = true;
+            }
+            if (m_NextFrame != nullptr){
+                m_NextFrame->validate(ctx);
+            }
+        }
+
     private:
         std::string m_Version;
         std::string m_Name;
@@ -160,6 +183,9 @@ namespace sldf{
         }
 
         void save(const std::string& fileName){
+            if (!isValid()){
+                throw std::runtime_error("SLDF file is not valid");
+            }
             std::ofstream file(fileName, std::ios::binary);
             if (!file.is_open()) {
                 throw std::runtime_error("Could not open file: " + fileName);
@@ -185,6 +211,12 @@ namespace sldf{
             else{
                 return m_FirstFrame->getFrameByType(type);
             }
+        }
+
+        bool isValid(){
+            ValidationContext ctx;
+            m_FirstFrame->validate(ctx);
+            return ctx.foundVertexData && ctx.foundIndexData;
         }
 
     private:

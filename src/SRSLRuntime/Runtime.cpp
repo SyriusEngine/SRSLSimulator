@@ -17,7 +17,7 @@ namespace SrslRuntime{
     }
 
     void Runtime::vertexShaderStage(){
-        auto& vertexDataFrame = m_Environment->m_SLDFFile.getFrameByType(SLDF_INPUT);
+        auto& vertexDataFrame = m_Environment->m_SLDFFile.getFrameByType(SLDF_VERTEX_DATA);
         auto& pVertexData = vertexDataFrame->getData();
         /* Vertex_INPUT is defined by the shader interface, which ALWAYS inherits from VertexInput
          * To get the size of an individual input vertex, we subtract the size of the VertexInput struct from the size of the Vertex_INPUT struct
