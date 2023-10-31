@@ -8,7 +8,7 @@ namespace SrslRuntime{
 
     class Runtime{
     public:
-        Runtime(const std::string& dataFile);
+        explicit Runtime(const std::string& dataFile);
 
         ~Runtime();
 
@@ -16,10 +16,13 @@ namespace SrslRuntime{
 
     private:
 
-        std::vector<Vertex_OUTPUT> vertexShaderStage();
+        void vertexShaderStage();
+
+        void rasterizerStage();
 
     private:
         Environment* m_Environment;
+        std::vector<Vertex_OUTPUT> m_Vertices;
     };
 
 }

@@ -12,11 +12,11 @@ namespace SrslRuntime{
 
     void Runtime::execute() {
         printf("===================Vertex Shader===================\n");
-        auto vertexOutput = vertexShaderStage();
+        vertexShaderStage();
         printf("===================Fragment Shader===================\n");
     }
 
-    std::vector<Vertex_OUTPUT> Runtime::vertexShaderStage(){
+    void Runtime::vertexShaderStage(){
         auto& vertexDataFrame = m_Environment->m_SLDFFile.getFrameByType(SLDF_INPUT);
         auto& pVertexData = vertexDataFrame->getData();
         /* Vertex_INPUT is defined by the shader interface, which ALWAYS inherits from VertexInput
@@ -29,7 +29,7 @@ namespace SrslRuntime{
         uint32_t incomingVertexSize = sizeof(Vertex_INPUT) - sizeof(VertexInput);
         uint64_t vertexCount = vertexDataFrame->getDataSize() / incomingVertexSize;
 
-        std::vector<Vertex_OUTPUT> vertexOutput(vertexCount); // allocate space for the output vertices
+        m_Vertices.reserve(vertexCount); // allocate space for the output vertices
         uint64_t vertexID = 0;
         for (uint64_t i = 0; i < vertexDataFrame->getDataSize(); i += sizeof(Vertex_INPUT)){
             // allocate memory for the input vertex
@@ -44,11 +44,14 @@ namespace SrslRuntime{
             auto vertexIn = reinterpret_cast<Vertex_INPUT*>(inMem.get());
             vertexIn->SRV_VERTEX_ID = vertexID;
 
-            main__Vertex(vertexIn, &vertexOutput[vertexID], m_Environment);
+            main__Vertex(vertexIn, &m_Vertices[vertexID], m_Environment); // call the vertex shader
 
             vertexID++;
         }
-        return vertexOutput;
+    }
+
+    void Runtime::rasterizerStage() {
+
     }
 
 }
