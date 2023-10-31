@@ -16,7 +16,7 @@ namespace SrslRuntime{
 
     private:
 
-        std::unique_ptr<char[]> vertexShaderStage();
+        std::vector<Vertex_OUTPUT> vertexShaderStage();
 
     private:
         Environment* m_Environment;
