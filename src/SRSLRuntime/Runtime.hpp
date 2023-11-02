@@ -18,11 +18,14 @@ namespace SrslRuntime{
 
         void vertexShaderStage();
 
+        void primitiveAssemblyStage();
+
         void rasterizerStage();
 
     private:
         Environment* m_Environment;
-        std::vector<Vertex_OUTPUT> m_Vertices;
+        std::vector<Vertex> m_Vertices;
+        std::vector<uint32_t> m_Indices;
     };
 
 }

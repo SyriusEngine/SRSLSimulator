@@ -2,6 +2,9 @@ ShaderType = Vertex;
 
 Input vsIn{
     float3 position: Position;
+    float3 color: Color;
+    float3 normal: Normal;
+    float2 texCoord: TexCoord;
 };
 
 Output vsOut{

@@ -1,6 +1,6 @@
 #include <iostream>
 #include "include/SRSLGenerator/SRSLGenerator.hpp"
-#include "include/SLDF_File_ver2.hpp"
+#include "include/SLDF_File.hpp"
 
 struct Vertex{
     float x, y, z;
@@ -14,10 +14,10 @@ int main(int argc, char** argv) {
         sldf::SLDF_File file;
 
         std::vector<sldf::VertexAttribute> vertexAttributes = {
-                {"position", 3, sizeof(float)},
-                {"color", 3, sizeof(float)},
-                {"normal", 3, sizeof(float)},
-                {"texCoord", 2, sizeof(float)}
+                {"Position", 3, sizeof(float)},
+                {"Color", 3, sizeof(float)},
+                {"Normal", 3, sizeof(float)},
+                {"TexCoord", 2, sizeof(float)}
         };
         std::vector<Vertex> triangle = {
                 {-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f},
@@ -33,16 +33,11 @@ int main(int argc, char** argv) {
 
         file.save("test.sldf");
 
-        sldf::SLDF_File file2("test.sldf");
-        std::cout << "File loaded" << std::endl;
 
-
-
-
-//        SrslGenerator::GeneratorDesc desc;
-//        desc.vertexShaderPath = "./SRSLShaders/Basic-vs.srsl";
-//        desc.fragmentShaderPath = "./SRSLShaders/Basic-fs.srsl";
-//        SrslGenerator::generateExecutable(desc);
+        SrslGenerator::GeneratorDesc desc;
+        desc.vertexShaderPath = "./SRSLShaders/Basic-vs.srsl";
+        desc.fragmentShaderPath = "./SRSLShaders/Basic-fs.srsl";
+        SrslGenerator::generateExecutable(desc);
 
     } catch (std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
