@@ -156,6 +156,7 @@ namespace sldf{
         std::unique_ptr<DataFrame> m_NextFrame;
     };
 
+
     class SLDF_File{
     public:
         SLDF_File()= default;
