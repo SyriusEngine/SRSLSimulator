@@ -37,5 +37,6 @@ add_executable(SRSLRuntimeTest
     src/SRSLRuntime/RuntimeMain.cpp
     src/SRSLRuntime/Runtime.cpp
     src/SRSLRuntime/Environment.cpp
-    src/SRSLRuntime/Shader/comp-vs.cpp
-    src/SRSLRuntime/Shader/comp-fs.cpp)
+#    src/SRSLRuntime/Shader/comp-vs.cpp
+#    src/SRSLRuntime/Shader/comp-fs.cpp
+)
