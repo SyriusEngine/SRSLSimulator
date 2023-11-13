@@ -5,6 +5,9 @@
 
 namespace SrslRuntime{
 
+    static const uint32_t s_ImageWidth = 800;
+    static const uint32_t s_ImageHeight = 600;
+
     struct VertexInput{
         uint32_t SRV_VERTEX_ID;
         uint32_t SRV_INSTANCE_ID;

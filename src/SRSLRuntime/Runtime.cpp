@@ -2,8 +2,13 @@
 
 namespace SrslRuntime{
 
-    Runtime::Runtime(const std::string &dataFile) {
+    Runtime::Runtime(const std::string &dataFile):
+    m_ColorBuffer(s_ImageWidth, s_ImageHeight, 4),
+    m_DepthBuffer(s_ImageWidth, s_ImageHeight, 1){
         m_Environment = new Environment(dataFile);
+
+        // initialize the depth buffer
+        m_DepthBuffer.clear(std::numeric_limits<float>::infinity());
     }
 
     Runtime::~Runtime() {
@@ -96,8 +101,59 @@ namespace SrslRuntime{
             auto& v2 = m_Vertices[m_Indices[i + 2]];
 
             // rasterize
-        }
+            auto minX = std::min(std::min(v0["SRV_POSITION"].x, v1["SRV_POSITION"].x), v2["SRV_POSITION"].x);
+            auto minY = std::min(std::min(v0["SRV_POSITION"].y, v1["SRV_POSITION"].y), v2["SRV_POSITION"].y);
+            auto maxX = std::max(std::max(v0["SRV_POSITION"].x, v1["SRV_POSITION"].x), v2["SRV_POSITION"].x);
+            auto maxY = std::max(std::max(v0["SRV_POSITION"].y, v1["SRV_POSITION"].y), v2["SRV_POSITION"].y);
 
+            for (uint32_t x = minX; x <= maxX; x++){
+                for (uint32_t y = minY; y <= maxY; y++){
+                    auto barryC = calculateBarryCentricCoords(v0, v1, v2, x, y);
+
+                    // if the point is inside the triangle, then calculate the depth and color
+                    if (barryC.a >= 0.0f && barryC.b >= 0.0f && barryC.c >= 0.0f){
+                        auto interpolated = interpolateAttributes(v0, v1, v2, barryC);
+                        auto depth = barryC.a * v0["SRV_POSITION"].z + barryC.b * v1["SRV_POSITION"].z + barryC.c * v2["SRV_POSITION"].z;
+
+                        // execute fragment shader if the pixel is visible
+                        if (depth < m_DepthBuffer(x, y, 1)){
+                            m_DepthBuffer(x, y, 1) = depth;
+                            Fragment fragment;
+                            main__Fragment(interpolated, fragment, m_Environment);
+                            m_ColorBuffer(x, y, 1) = fragment["SRV_TARGET_0"].x;
+                            m_ColorBuffer(x, y, 2) = fragment["SRV_TARGET_0"].y;
+                            m_ColorBuffer(x, y, 3) = fragment["SRV_TARGET_0"].z;
+                            printf("Pixel (%d, %d) is visible\n", x, y);
+                        }
+                    }
+                }
+            }
+        }
+        m_ColorBuffer.save("Output.png");
     }
 
+    BarryCentricCoordinates
+    Runtime::calculateBarryCentricCoords(Vertex &v0, Vertex &v1, Vertex &v2, uint32_t x, uint32_t y) {
+        auto v0x = v0["SRV_POSITION"].x;
+        auto v0y = v0["SRV_POSITION"].y;
+        auto v1x = v1["SRV_POSITION"].x;
+        auto v1y = v1["SRV_POSITION"].y;
+        auto v2x = v2["SRV_POSITION"].x;
+        auto v2y = v2["SRV_POSITION"].y;
+
+        BarryCentricCoordinates bcc;
+        bcc.a = (v1y - v2y) * (x - v2x) + (v2x - v1x) * (y - v2y);
+        bcc.b = (v2y - v0y) * (x - v2x) + (v0x - v2x) * (y - v2y);
+        bcc.c = 1.0f - bcc.a - bcc.b;
+
+        return bcc;
+    }
+
+    Vertex Runtime::interpolateAttributes(Vertex &v0, Vertex &v1, Vertex &v2, BarryCentricCoordinates &bcc) {
+        Vertex result;
+        for (auto [key, value]: v0){
+            result[key] = bcc.a * v0[key] + bcc.b * v1[key] + bcc.c * v2[key];
+        }
+        return result;
+    }
 }
