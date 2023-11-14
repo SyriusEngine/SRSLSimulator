@@ -18,7 +18,7 @@ link_directories(./cmake-build-debug/SyriusShadingLanguage/)
 set(SRSL_GRAPHICS_API_SRC
     src/GraphicsAPI/Pipeline.cpp
     src/GraphicsAPI/ContextImpl.cpp
-    src/GraphicsAPI/SrslAPI.cpp src/GraphicsAPI/VertexLayout.cpp src/GraphicsAPI/Include.cpp src/GraphicsAPI/Context.cpp src/GraphicsAPI/VertexBufferImpl.cpp src/GraphicsAPI/VertexBufferImpl.hpp)
+    src/GraphicsAPI/SrslAPI.cpp src/GraphicsAPI/VertexLayout.cpp src/GraphicsAPI/Include.cpp src/GraphicsAPI/Context.cpp src/GraphicsAPI/VertexBufferImpl.cpp src/GraphicsAPI/VertexBufferImpl.hpp src/GraphicsAPI/IndexBufferImpl.cpp src/GraphicsAPI/IndexBufferImpl.hpp)
 
 add_library(SrslAPI SHARED ${SRSL_GRAPHICS_API_SRC})
 target_link_libraries(SrslAPI -lSrslCompiler)
