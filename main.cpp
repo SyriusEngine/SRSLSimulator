@@ -1,6 +1,5 @@
 #include <iostream>
-#include "include/SRSLGenerator/SRSLGenerator.hpp"
-#include "include/SLDF_File.hpp"
+#include "include/GraphicsAPI/SrslAPI.hpp"
 
 struct Vertex{
     float x, y, z;
@@ -11,35 +10,26 @@ struct Vertex{
 
 int main(int argc, char** argv) {
     try {
-        sldf::SLDF_File file;
+        using namespace SrslAPI;
 
-        std::vector<sldf::VertexAttribute> vertexAttributes = {
-                {"Position", 3, sizeof(float)},
-                {"Color", 3, sizeof(float)},
-                {"Normal", 3, sizeof(float)},
-                {"TexCoord", 2, sizeof(float)}
-        };
+        auto ctx = createContext();
+
+        auto vl = ctx->createVertexLayout();
+        vl->pushAttribute("Position", SRSL_FLOAT32_3);
+        vl->pushAttribute("Color", SRSL_FLOAT32_3);
+        vl->pushAttribute("Normal", SRSL_FLOAT32_3);
+        vl->pushAttribute("TexCoords", SRSL_FLOAT32_2);
+
         std::vector<Vertex> triangle = {
-                {-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f},
-                {0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.f, 0.f, 0.f, 1.f, 1.f, 0.f},
-                {0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.f, 0.f, 0.f, 1.f, 0.5f, 1.f}
+                {-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.f, 0.f, 0.f, 1.f, 0.f},
+                {0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.f, 0.f, 0.f, 1.f, 1.f},
+                {0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.f, 0.f, 0.f, 1.f, 0.5f}
         };
-        std::vector<uint32_t> indices = {
-                0, 1, 2
-        };
+        auto vertexBuffer = ctx->createVertexBuffer(vl, triangle.data(), triangle.size() * sizeof(Vertex));
 
-        file.setVertexData("vsIn", triangle.data(), triangle.size() * sizeof(Vertex), vertexAttributes.data(), vertexAttributes.size());
-        file.setIndexData("indices", indices.data(), 3, sizeof(uint32_t));
-
-        file.save("test.sldf");
-
-
-        SrslGenerator::GeneratorDesc desc;
-        desc.vertexShaderPath = "./SRSLShaders/Basic-vs.srsl";
-        desc.fragmentShaderPath = "./SRSLShaders/Basic-fs.srsl";
-        SrslGenerator::generateExecutable(desc);
 
     } catch (std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
     }
+    return 0;
 }

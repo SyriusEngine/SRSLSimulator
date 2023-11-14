@@ -7,22 +7,24 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(SyriusShadingLanguage)
 
+add_compile_definitions(SRSL_GRAPHICS_API_EXPORT_DLL)
+
 include_directories(./Dependencies/)
 include_directories(./SyriusShadingLanguage/include/)
 
 link_directories(./cmake-build-debug/)
 link_directories(./cmake-build-debug/SyriusShadingLanguage/)
 
-set(SRSL_GENERATOR_SRC
-    src/SRSLGenerator/SRSLGenerator.cpp )
+set(SRSL_GRAPHICS_API_SRC
+    src/GraphicsAPI/Pipeline.cpp
+    src/GraphicsAPI/ContextImpl.cpp
+    src/GraphicsAPI/SrslAPI.cpp src/GraphicsAPI/VertexLayout.cpp src/GraphicsAPI/Include.cpp src/GraphicsAPI/Context.cpp src/GraphicsAPI/VertexBufferImpl.cpp src/GraphicsAPI/VertexBufferImpl.hpp)
 
-add_library(SrslGenerator SHARED ${SRSL_GENERATOR_SRC})
-target_link_libraries(SrslGenerator -lSrslCompiler)
+add_library(SrslAPI SHARED ${SRSL_GRAPHICS_API_SRC})
+target_link_libraries(SrslAPI -lSrslCompiler)
 
-set(SRSL_SIMULATOR_SRC)
-
-add_executable(SrslSimulator ${SRSL_SIMULATOR_SRC} main.cpp)
-target_link_libraries(SrslSimulator -lSrslGenerator)
+add_executable(SrslSimulator main.cpp)
+target_link_libraries(SrslSimulator -lSrslAPI)
 
 
 
@@ -32,11 +34,3 @@ target_link_libraries(SrslSimulator -lSrslGenerator)
 # TEMPORARY EXECUTABLE FOR TESTING
 
 ###########################################################################
-
-add_executable(SRSLRuntimeTest
-    src/SRSLRuntime/RuntimeMain.cpp
-    src/SRSLRuntime/Runtime.cpp
-    src/SRSLRuntime/Environment.cpp
-    src/SRSLRuntime/Shader/comp-vs.cpp
-    src/SRSLRuntime/Shader/comp-fs.cpp
-    src/SRSLRuntime/stb_image_write.cpp src/SRSLRuntime/stb_image_write.hpp)
