@@ -35,6 +35,12 @@ int main(int argc, char** argv) {
         auto shader = ctx->createShader("./SRSLShaders/Basic-vs.srsl", "./SRSLShaders/Basic-fs.srsl");
 
 
+        vertexBuffer->bind();
+        indexBuffer->bind();
+        shader->bind();
+        ctx->draw();
+
+
     } catch (std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
     }

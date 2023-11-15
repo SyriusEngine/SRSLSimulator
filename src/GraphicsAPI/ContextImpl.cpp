@@ -12,7 +12,7 @@ namespace SrslAPI{
     }
 
     void ContextImpl::draw() {
-
+        m_Pipeline->execute();
     }
 
     UP<VertexBuffer>

@@ -18,6 +18,8 @@ namespace SrslAPI{
 
         virtual void bind() = 0;
 
+        inline const std::vector<uint32_t>& getData() const { return m_Data; }
+
     protected:
         std::vector<uint32_t> m_Data;
         uint32_t m_Count;

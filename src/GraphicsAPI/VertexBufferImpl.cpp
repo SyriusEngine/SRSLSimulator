@@ -5,7 +5,7 @@ namespace SrslAPI{
 
 
     VertexBufferImpl::VertexBufferImpl(const UP<VertexLayout> &layout, const void *data, uint32_t size, Pipeline *pipeline):
-    VertexBuffer(layout, data, size), m_Pipeline(pipeline) {
+    VertexBuffer(layout, data, size), m_Pipeline(pipeline), m_Count(size / layout->getStride()) {
         if (size % layout->getStride() != 0) {
             throw std::runtime_error("[VertexBuffer][VertexBuffer]: size of data is not a multiple of the stride of the layout");
         }

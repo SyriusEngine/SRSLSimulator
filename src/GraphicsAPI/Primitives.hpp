@@ -9,4 +9,8 @@ namespace SrslAPI{
 
     typedef std::unordered_map<std::string, glm::vec4> OutputVertex;
 
+    typedef OutputVertex InputFragment;
+
+    typedef OutputVertex OutputFragment;
+
 }

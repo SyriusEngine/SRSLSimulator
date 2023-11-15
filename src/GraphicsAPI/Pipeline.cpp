@@ -15,7 +15,12 @@ namespace SrslAPI{
 
     void Pipeline::execute() {
         checkState();
+        RenderData data;
+        executeVertexShader(data);
 
+        for (auto& vertex: data.vertices){
+            printf("Vertex: %f, %f, %f\n", vertex["SRV_POSITION"].x, vertex["SRV_POSITION"].y, vertex["SRV_POSITION"].z);
+        }
     }
 
     void Pipeline::checkState() {
@@ -41,6 +46,13 @@ namespace SrslAPI{
 
     void Pipeline::setShader(ShaderImpl *shader) {
         m_Shader = shader;
+    }
+
+    void Pipeline::executeVertexShader(RenderData &data) {
+        data.vertices.reserve(m_VertexBuffer->getCount());
+        for (const auto& vertex: *m_VertexBuffer){
+            data.vertices.push_back(m_Shader->executeVertexShader(vertex));
+        }
     }
 
 }

@@ -6,13 +6,18 @@ namespace SrslAPI{
     ShaderImpl::ShaderImpl(const std::string &vertexShader, const std::string &fragmentShader, Pipeline *pipeline):
     Shader(vertexShader, fragmentShader),
     m_Pipeline(pipeline),
-    m_ShaderModule(nullptr){
+    m_ShaderModule(nullptr),
+    m_VertexShaderEntry(nullptr),
+    m_FragmentShaderEntry(nullptr){
         compileSrsl(vertexShader, fragmentShader);
         compileCpp();
     }
 
     ShaderImpl::~ShaderImpl() {
         unloadExecutable();
+//        if (std::filesystem::exists(m_OutputPath)) {
+//            std::filesystem::remove_all(m_OutputPath);
+//        }
     }
 
     void ShaderImpl::bind() {
@@ -56,19 +61,30 @@ namespace SrslAPI{
         m_ExecutablePath = m_OutputPath.string();
         m_ExecutablePath += "/__shader__" + std::to_string(reinterpret_cast<uint64_t>(this)) + ".dll";
 
-        std::string cmd = "g++ -shared "; // shared flag for dll
+        std::string cmd = "g++ -shared -std=c++17 "; // shared flag for dll
         cmd += "-I./Dependencies ";
         cmd += "-o " + m_ExecutablePath + " ";
         cmd += m_OutputPath.string() + "/" + COMPILED_VS_NAME + " ";
         cmd += m_OutputPath.string() + "/" + COMPILED_FS_NAME + " ";
 
-        system(cmd.c_str());
+        auto result = system(cmd.c_str());
+        if (result != 0) {
+            throw std::runtime_error("Failed to compile shader (g++ exited with code " + std::to_string(result) + ")");
+        }
     }
 
     void ShaderImpl::loadExecutable() {
         m_ShaderModule = LoadLibrary(m_ExecutablePath.c_str());
         if(m_ShaderModule == nullptr){
             throw std::runtime_error("Failed to load shader module");
+        }
+        m_VertexShaderEntry = reinterpret_cast<VertexShaderMain>(GetProcAddress(m_ShaderModule, "main__Vertex"));
+        if (m_VertexShaderEntry == nullptr) {
+            throw std::runtime_error("Failed to load vertex shader entry point");
+        }
+        m_FragmentShaderEntry = reinterpret_cast<FragmentShaderMain>(GetProcAddress(m_ShaderModule, "main__Fragment"));
+        if (m_FragmentShaderEntry == nullptr) {
+            throw std::runtime_error("Failed to load fragment shader entry point");
         }
 
     }

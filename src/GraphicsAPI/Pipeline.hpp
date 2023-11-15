@@ -8,6 +8,11 @@
 
 namespace SrslAPI{
 
+    struct RenderData{
+        std::vector<OutputVertex> vertices;
+        std::vector<OutputFragment> fragments;
+    };
+
     class Pipeline{
     public:
         Pipeline();
@@ -23,6 +28,11 @@ namespace SrslAPI{
         void setShader(ShaderImpl* shader);
 
         void checkState();
+
+    private:
+
+        void executeVertexShader(RenderData& data);
+
 
     private:
         VertexBufferImpl* m_VertexBuffer;
