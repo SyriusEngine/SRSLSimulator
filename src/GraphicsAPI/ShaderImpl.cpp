@@ -54,7 +54,7 @@ namespace SrslAPI{
                                      "The current dir is: " + includePath.string());
         }
         m_ExecutablePath = m_OutputPath.string();
-        m_ExecutablePath += "__shader__" + std::to_string(reinterpret_cast<uint64_t>(this)) + ".dll";
+        m_ExecutablePath += "/__shader__" + std::to_string(reinterpret_cast<uint64_t>(this)) + ".dll";
 
         std::string cmd = "g++ -shared "; // shared flag for dll
         cmd += "-I./Dependencies ";
