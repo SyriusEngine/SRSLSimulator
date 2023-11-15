@@ -50,7 +50,8 @@ namespace SrslAPI{
 
     void Pipeline::executeVertexShader(RenderData &data) {
         data.vertices.reserve(m_VertexBuffer->getCount());
-        for (const auto& vertex: *m_VertexBuffer){
+        auto& vertices = m_VertexBuffer->getVertices();
+        for (auto& vertex: vertices){
             data.vertices.push_back(m_Shader->executeVertexShader(vertex));
         }
     }

@@ -15,19 +15,11 @@ namespace SrslAPI{
 
         void bind() override;
 
-        inline InputVertex& operator[](uint32_t index){
-            return m_Vertices[index];
-        }
-
-        typename std::vector<InputVertex>::iterator begin(){
-            return m_Vertices.begin();
-        }
-
-        typename std::vector<InputVertex>::iterator end(){
-            return m_Vertices.end();
-        }
-
         [[nodiscard]] inline uint32_t getCount() const { return m_Count; }
+
+        [[nodiscard]] inline std::vector<InputVertex>& getVertices() { return m_Vertices; }
+
+
 
     private:
 

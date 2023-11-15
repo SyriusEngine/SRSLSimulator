@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <windows.h>
 #include <glm/glm.hpp>
+#include <iostream>
 #include "Primitives.hpp"
 
 #define COMPILED_SRSL_NAME "comp.cpp"
@@ -26,7 +27,7 @@ namespace SrslAPI{
 
         void bind() override;
 
-        inline OutputVertex executeVertexShader(const InputVertex& input){
+        inline OutputVertex executeVertexShader(InputVertex& input){
             return m_VertexShaderEntry(input);
         }
 
