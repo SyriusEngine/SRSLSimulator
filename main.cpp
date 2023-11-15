@@ -27,6 +27,13 @@ int main(int argc, char** argv) {
         };
         auto vertexBuffer = ctx->createVertexBuffer(vl, triangle.data(), triangle.size() * sizeof(Vertex));
 
+        std::vector<uint32_t> indices = {
+                0, 1, 2
+        };
+        auto indexBuffer = ctx->createIndexBuffer(indices.data(), indices.size());
+
+        auto shader = ctx->createShader("./SRSLShaders/Basic-vs.srsl", "./SRSLShaders/Basic-fs.srsl");
+
 
     } catch (std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;

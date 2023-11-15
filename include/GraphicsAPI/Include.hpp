@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <cstdint>
 #include <stdexcept>
+#include <limits>
 
 #if defined(WIN64) || defined(_WIN64) || defined(WIN32)
 #if defined(SRSL_GRAPHICS_API_EXPORT_DLL)

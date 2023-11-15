@@ -4,7 +4,8 @@ namespace SrslAPI{
 
     Pipeline::Pipeline():
     m_VertexBuffer(nullptr),
-    m_IndexBuffer(nullptr){
+    m_IndexBuffer(nullptr),
+    m_Shader(nullptr){
 
     }
 
@@ -24,6 +25,9 @@ namespace SrslAPI{
         if(m_IndexBuffer == nullptr){
             throw std::runtime_error("Index buffer is not set");
         }
+        if(m_Shader == nullptr){
+            throw std::runtime_error("Shader is not set");
+        }
 
     }
 
@@ -33,6 +37,10 @@ namespace SrslAPI{
 
     void Pipeline::setIndexBuffer(IndexBufferImpl *indexBuffer) {
         m_IndexBuffer = indexBuffer;
+    }
+
+    void Pipeline::setShader(ShaderImpl *shader) {
+        m_Shader = shader;
     }
 
 }
