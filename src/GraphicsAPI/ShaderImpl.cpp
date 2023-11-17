@@ -15,9 +15,9 @@ namespace SrslAPI{
 
     ShaderImpl::~ShaderImpl() {
         unloadExecutable();
-//        if (std::filesystem::exists(m_OutputPath)) {
-//            std::filesystem::remove_all(m_OutputPath);
-//        }
+        if (std::filesystem::exists(m_OutputPath)) {
+            std::filesystem::remove_all(m_OutputPath);
+        }
     }
 
     void ShaderImpl::bind() {

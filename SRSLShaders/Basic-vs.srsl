@@ -9,8 +9,10 @@ Input vsIn{
 
 Output vsOut{
     float4 position: SRV_POSITION;
+    float4 color: Color;
 };
 
 void main(){
     vsOut.position = float4(vsIn.position, 1.0);
+    vsOut.color = float4(vsIn.color, 1.0);
 }

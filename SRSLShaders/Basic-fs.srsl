@@ -2,6 +2,7 @@ ShaderType = Fragment;
 
 Input fsIn{
     float4 position: SRV_POSITION;
+    float4 color: Color;
 };
 
 Output fsOut{
@@ -10,5 +11,5 @@ Output fsOut{
 
 
 void main() {
-    fsOut.color = {0.8f, 0.3f, 0.2f, 1.0f};
+    fsOut.color = fsIn.color;
 }
