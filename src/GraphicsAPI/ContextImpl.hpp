@@ -5,6 +5,7 @@
 #include "IndexBufferImpl.hpp"
 #include "ShaderImpl.hpp"
 #include "Pipeline.hpp"
+#include "FrameBufferImpl.hpp"
 
 namespace SrslAPI{
 
@@ -19,6 +20,8 @@ namespace SrslAPI{
         [[nodiscard]] UP<IndexBuffer> createIndexBuffer(const uint32_t* data, uint32_t count) const override;
 
         [[nodiscard]] UP<Shader> createShader(const std::string& vertexShader, const std::string& fragmentShader) const override;
+
+        UP<FrameBuffer> createFrameBuffer(const FrameBufferLayout& layout) const override;
 
         void draw() override;
 

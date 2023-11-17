@@ -34,11 +34,31 @@ int main(int argc, char** argv) {
 
         auto shader = ctx->createShader("./SRSLShaders/Basic-vs.srsl", "./SRSLShaders/Basic-fs.srsl");
 
+        ColorAttachmentDesc desc;
+        desc.width = 1280;
+        desc.height = 720;
+        desc.channelCount = 4;
+        desc.clearColor[0] = 0.2f;
+        desc.clearColor[1] = 0.3f;
+        desc.clearColor[2] = 0.8f;
+        desc.clearColor[3] = 1.0f;
 
+        FrameBufferLayout fbLayout;
+        fbLayout.setViewport(1280, 720, 0, 0);
+        fbLayout.addColorAttachment(desc);
+
+        auto fb = ctx->createFrameBuffer(fbLayout);
+        fb->getColorAttachment(0)->clear();
+
+
+        fb->bind();
         vertexBuffer->bind();
         indexBuffer->bind();
         shader->bind();
         ctx->draw();
+
+        fb->getColorAttachment(0)->save("test.png");
+
 
 
     } catch (std::exception& e) {

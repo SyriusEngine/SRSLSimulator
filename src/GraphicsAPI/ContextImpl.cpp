@@ -26,4 +26,8 @@ namespace SrslAPI{
     UP<Shader> ContextImpl::createShader(const std::string &vertexShader, const std::string &fragmentShader) const {
         return createUP<ShaderImpl>(vertexShader, fragmentShader, m_Pipeline.get());
     }
+
+    UP<FrameBuffer> ContextImpl::createFrameBuffer(const FrameBufferLayout &layout) const {
+        return createUP<FrameBufferImpl>(layout, m_Pipeline.get());
+    }
 }

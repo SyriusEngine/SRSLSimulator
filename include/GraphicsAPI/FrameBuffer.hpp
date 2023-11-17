@@ -5,7 +5,7 @@
 
 namespace SrslAPI{
 
-    class FrameBufferLayout{
+    class SRSL_GRAPHICS_API FrameBufferLayout{
     public:
         FrameBufferLayout();
 
@@ -26,13 +26,21 @@ namespace SrslAPI{
         friend class FrameBuffer;
     };
 
-    class FrameBuffer{
+    class SRSL_GRAPHICS_API FrameBuffer{
     public:
         explicit FrameBuffer(const FrameBufferLayout& layout);
 
-        ~FrameBuffer() = default;
+        virtual ~FrameBuffer() = default;
 
         virtual void bind() = 0;
+
+        [[nodiscard]] inline const UP<ColorAttachment>& getColorAttachment(uint32_t index) const{
+            return m_ColorAttachments[index];
+        }
+
+        [[nodiscard]] inline const UP<ColorAttachment>& operator[](uint32_t index) const {
+            return m_ColorAttachments[index];
+        }
 
     protected:
         uint32_t m_Width;

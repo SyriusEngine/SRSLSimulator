@@ -23,10 +23,13 @@ namespace SrslAPI{
     }
 
     FrameBuffer::FrameBuffer(const FrameBufferLayout &layout):
-        m_Width(layout.m_Width),
-        m_Height(layout.m_Height),
-        m_X(layout.m_X),
-        m_Y(layout.m_Y){
+    m_Width(layout.m_Width),
+    m_Height(layout.m_Height),
+    m_X(layout.m_X),
+    m_Y(layout.m_Y){
+        for (auto& desc: layout.m_ColorAttachmentDesc){
+            m_ColorAttachments.push_back(createUP<ColorAttachment>(desc));
+        }
 
     }
 }

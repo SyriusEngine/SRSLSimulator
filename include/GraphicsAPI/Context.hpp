@@ -5,6 +5,7 @@
 #include "VertexBuffer.hpp"
 #include "IndexBuffer.hpp"
 #include "Shader.hpp"
+#include "FrameBuffer.hpp"
 
 namespace SrslAPI{
 
@@ -21,6 +22,8 @@ namespace SrslAPI{
         [[nodiscard]] virtual UP<IndexBuffer> createIndexBuffer(const uint32_t* data, uint32_t count) const = 0;
 
         [[nodiscard]] virtual UP<Shader> createShader(const std::string& vertexShader, const std::string& fragmentShader) const = 0;
+
+        [[nodiscard]] virtual UP<FrameBuffer> createFrameBuffer(const FrameBufferLayout& layout) const = 0;
 
         virtual void draw() = 0;
     };

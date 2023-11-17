@@ -10,5 +10,5 @@ Output fsOut{
 
 
 void main() {
-    fsOut.color = {1.0f, 0.0f, 0.0f, 1.0f};
+    fsOut.color = {0.8f, 0.3f, 0.2f, 1.0f};
 }
