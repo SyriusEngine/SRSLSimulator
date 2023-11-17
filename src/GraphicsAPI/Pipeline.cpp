@@ -16,11 +16,13 @@ namespace SrslAPI{
     void Pipeline::execute() {
         checkState();
         RenderData data;
-        executeVertexShader(data);
 
+        executeVertexShader(data);
+        // TODO: remove this later
         for (auto& vertex: data.vertices){
             printf("Vertex: %f, %f, %f\n", vertex["SRV_POSITION"].x, vertex["SRV_POSITION"].y, vertex["SRV_POSITION"].z);
         }
+        rasterize(data);
     }
 
     void Pipeline::checkState() {
@@ -51,9 +53,18 @@ namespace SrslAPI{
     void Pipeline::executeVertexShader(RenderData &data) {
         data.vertices.reserve(m_VertexBuffer->getCount());
         auto& vertices = m_VertexBuffer->getVertices();
+
         for (auto& vertex: vertices){
             data.vertices.push_back(m_Shader->executeVertexShader(vertex));
+
+            auto& processedVertex = data.vertices.back();
         }
+
+    }
+
+    void Pipeline::rasterize(RenderData &data) {
+
+
     }
 
 }

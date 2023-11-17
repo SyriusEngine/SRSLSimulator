@@ -33,6 +33,8 @@ namespace SrslAPI{
 
         void executeVertexShader(RenderData& data);
 
+        void rasterize(RenderData& data);
+
 
     private:
         VertexBufferImpl* m_VertexBuffer;
