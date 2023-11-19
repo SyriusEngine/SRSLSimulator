@@ -1,4 +1,6 @@
 #include <iostream>
+#include <chrono>
+#include <glm/glm.hpp>
 #include "include/GraphicsAPI/SrslAPI.hpp"
 
 struct Vertex{
@@ -7,6 +9,10 @@ struct Vertex{
     float nx, ny, nz;
     float u, v;
 };
+
+time_t getTime(){
+    return std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+}
 
 int main(int argc, char** argv) {
     try {
@@ -34,7 +40,10 @@ int main(int argc, char** argv) {
         };
         auto indexBuffer = ctx->createIndexBuffer(indices.data(), indices.size());
 
+        auto preShader = getTime();
         auto shader = ctx->createShader("./SRSLShaders/Basic-vs.srsl", "./SRSLShaders/Basic-fs.srsl");
+        auto postShader = getTime();
+        std::cout << "Shader compilation time: " << postShader - preShader << std::endl;
 
         ColorAttachmentDesc desc;
         desc.width = 1280;
@@ -52,12 +61,28 @@ int main(int argc, char** argv) {
         auto fb = ctx->createFrameBuffer(fbLayout);
         fb->getColorAttachment(0)->clear();
 
+        glm::mat4 modelData(1.0f);
+        ConstantBufferDesc cbd;
+        cbd.name = "ModelData";
+        cbd.size = sizeof(glm::mat4);
+        cbd.data = &modelData;
+        auto cb = ctx->createConstantBuffer(cbd);
 
+
+
+
+
+        // ======================= DRAW =======================
+        auto preFrame = getTime();
         fb->bind();
         vertexBuffer->bind();
         indexBuffer->bind();
         shader->bind();
+        cb->bind();
         ctx->draw();
+        auto postFrame = getTime();
+
+        std::cout << "Frame time: " << postFrame - preFrame << std::endl;
 
         fb->getColorAttachment(0)->save("test.png");
 

@@ -1,11 +1,14 @@
+#include <fstream>
 #include "ShaderImpl.hpp"
 #include "Pipeline.hpp"
 
 namespace SrslAPI{
 
-    ShaderImpl::ShaderImpl(const std::string &vertexShader, const std::string &fragmentShader, Pipeline *pipeline):
+    ShaderImpl::ShaderImpl(const std::string &vertexShader, const std::string &fragmentShader,
+                           const UP<Pipeline>& pipeline, const UP<VideoMemory>& videoMemory):
     Shader(vertexShader, fragmentShader),
     m_Pipeline(pipeline),
+    m_VideoMemory(videoMemory),
     m_ShaderModule(nullptr),
     m_VertexShaderEntry(nullptr),
     m_FragmentShaderEntry(nullptr){
@@ -15,9 +18,9 @@ namespace SrslAPI{
 
     ShaderImpl::~ShaderImpl() {
         unloadExecutable();
-        if (std::filesystem::exists(m_OutputPath)) {
-            std::filesystem::remove_all(m_OutputPath);
-        }
+//        if (std::filesystem::exists(m_OutputPath)) {
+//            std::filesystem::remove_all(m_OutputPath);
+//        }
     }
 
     void ShaderImpl::bind() {
@@ -47,6 +50,7 @@ namespace SrslAPI{
 
     void ShaderImpl::compileCpp() {
         std::filesystem::path includePath = std::filesystem::current_path();
+        writeVideoMemoryHeader();
         includePath /= "Dependencies";
         includePath /= "glm";
         if (!std::filesystem::exists(includePath)) {
@@ -94,5 +98,32 @@ namespace SrslAPI{
             FreeLibrary(m_ShaderModule);
             m_ShaderModule = nullptr;
         }
+    }
+
+    void ShaderImpl::writeVideoMemoryHeader() {
+        std::ofstream file(m_OutputPath.string() + "/VideoMemory.hpp");
+        file << "#pragma once\n"
+                "\n"
+                "#include <string>\n"
+                "#include <unordered_map>\n"
+                "\n"
+                "namespace SrslAPI{\n"
+                "\n"
+                "    class VideoMemory{\n"
+                "    public:\n"
+                "        VideoMemory() = default;\n"
+                "\n"
+                "        ~VideoMemory();\n"
+                "\n"
+                "        void setConstantBuffer(const std::string& name, void* data, uint32_t size);\n"
+                "\n"
+                "        char* getConstantBuffer(const std::string& name);\n"
+                "\n"
+                "    private:\n"
+                "        std::unordered_map<std::string, char*> m_ConstantBuffers;\n"
+                "    };\n"
+                "\n"
+                "}";
+        file.close();
     }
 }

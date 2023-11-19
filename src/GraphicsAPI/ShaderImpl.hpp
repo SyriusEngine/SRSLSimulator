@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <iostream>
 #include "Primitives.hpp"
+#include "VideoMemory.hpp"
 
 #define COMPILED_SRSL_NAME "comp.cpp"
 #define COMPILED_VS_NAME "comp-vs.cpp"
@@ -14,25 +15,26 @@
 
 namespace SrslAPI{
 
-    typedef std::unordered_map<std::string, glm::vec4> (*VertexShaderMain)(const std::unordered_map<std::string, char*>&);
-    typedef std::unordered_map<std::string, glm::vec4> (*FragmentShaderMain)(const std::unordered_map<std::string, glm::vec4>&);
+    typedef std::unordered_map<std::string, glm::vec4> (*VertexShaderMain)(const std::unordered_map<std::string, char*>&, VideoMemory*);
+    typedef std::unordered_map<std::string, glm::vec4> (*FragmentShaderMain)(const std::unordered_map<std::string, glm::vec4>&, VideoMemory*);
 
     class Pipeline;
 
     class ShaderImpl: public Shader{
     public:
-        ShaderImpl(const std::string& vertexShader, const std::string& fragmentShader, Pipeline* pipeline);
+        ShaderImpl(const std::string& vertexShader, const std::string& fragmentShader,
+                   const UP<Pipeline>& pipeline, const UP<VideoMemory>& videoMemory);
 
         ~ShaderImpl() override;
 
         void bind() override;
 
         inline OutputVertex executeVertexShader(InputVertex& input){
-            return m_VertexShaderEntry(input);
+            return m_VertexShaderEntry(input, m_VideoMemory.get());
         }
 
         inline OutputFragment executeFragmentShader(const InputFragment& input){
-            return m_FragmentShaderEntry(input);
+            return m_FragmentShaderEntry(input, m_VideoMemory.get());
         }
 
     private:
@@ -45,8 +47,12 @@ namespace SrslAPI{
 
         void unloadExecutable();
 
+        void writeVideoMemoryHeader();
+
     private:
-        Pipeline* m_Pipeline;
+        const UP<Pipeline>& m_Pipeline;
+        const UP<VideoMemory>& m_VideoMemory;
+
         UP<Srsl::ShaderModule> m_VertexShaderModule;
         UP<Srsl::ShaderModule> m_FragmentShaderModule;
         UP<Srsl::ShaderProgram> m_ShaderProgram;

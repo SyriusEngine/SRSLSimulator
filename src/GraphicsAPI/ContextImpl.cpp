@@ -3,7 +3,8 @@
 namespace SrslAPI{
 
     ContextImpl::ContextImpl():
-    m_Pipeline(new Pipeline()){
+    m_Pipeline(new Pipeline()),
+    m_VideoMemory(new VideoMemory()){
 
     }
 
@@ -24,10 +25,14 @@ namespace SrslAPI{
     }
 
     UP<Shader> ContextImpl::createShader(const std::string &vertexShader, const std::string &fragmentShader) const {
-        return createUP<ShaderImpl>(vertexShader, fragmentShader, m_Pipeline.get());
+        return createUP<ShaderImpl>(vertexShader, fragmentShader, m_Pipeline, m_VideoMemory);
     }
 
     UP<FrameBuffer> ContextImpl::createFrameBuffer(const FrameBufferLayout &layout) const {
         return createUP<FrameBufferImpl>(layout, m_Pipeline.get());
+    }
+
+    UP<ConstantBuffer> ContextImpl::createConstantBuffer(const ConstantBufferDesc &desc) const {
+        return createUP<ConstantBufferImpl>(desc, m_Pipeline, m_VideoMemory);
     }
 }

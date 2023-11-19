@@ -12,6 +12,10 @@ Output vsOut{
     float4 color: Color;
 };
 
+ConstantBuffer(slot = 0) ModelData{
+    float4x4 modelMatrix;
+};
+
 void main(){
     vsOut.position = float4(vsIn.position, 1.0);
     vsOut.color = float4(vsIn.color, 1.0);
