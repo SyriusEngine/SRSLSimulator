@@ -47,8 +47,6 @@ namespace SrslAPI{
 
         void unloadExecutable();
 
-        void writeVideoMemoryHeader();
-
     private:
         const UP<Pipeline>& m_Pipeline;
         const UP<VideoMemory>& m_VideoMemory;

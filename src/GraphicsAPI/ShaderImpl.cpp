@@ -50,7 +50,6 @@ namespace SrslAPI{
 
     void ShaderImpl::compileCpp() {
         std::filesystem::path includePath = std::filesystem::current_path();
-        writeVideoMemoryHeader();
         includePath /= "Dependencies";
         includePath /= "glm";
         if (!std::filesystem::exists(includePath)) {
@@ -100,30 +99,4 @@ namespace SrslAPI{
         }
     }
 
-    void ShaderImpl::writeVideoMemoryHeader() {
-        std::ofstream file(m_OutputPath.string() + "/VideoMemory.hpp");
-        file << "#pragma once\n"
-                "\n"
-                "#include <string>\n"
-                "#include <unordered_map>\n"
-                "\n"
-                "namespace SrslAPI{\n"
-                "\n"
-                "    class VideoMemory{\n"
-                "    public:\n"
-                "        VideoMemory() = default;\n"
-                "\n"
-                "        ~VideoMemory();\n"
-                "\n"
-                "        void setConstantBuffer(const std::string& name, void* data, uint32_t size);\n"
-                "\n"
-                "        char* getConstantBuffer(const std::string& name);\n"
-                "\n"
-                "    private:\n"
-                "        std::unordered_map<std::string, char*> m_ConstantBuffers;\n"
-                "    };\n"
-                "\n"
-                "}";
-        file.close();
-    }
 }
