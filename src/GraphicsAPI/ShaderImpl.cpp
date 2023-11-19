@@ -5,10 +5,9 @@
 namespace SrslAPI{
 
     ShaderImpl::ShaderImpl(const std::string &vertexShader, const std::string &fragmentShader,
-                           const UP<Pipeline>& pipeline, const UP<VideoMemory>& videoMemory):
+                           const UP<Pipeline>& pipeline):
     Shader(vertexShader, fragmentShader),
     m_Pipeline(pipeline),
-    m_VideoMemory(videoMemory),
     m_ShaderModule(nullptr),
     m_VertexShaderEntry(nullptr),
     m_FragmentShaderEntry(nullptr){

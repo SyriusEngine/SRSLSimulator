@@ -8,7 +8,6 @@
 #include "ConstantBufferImpl.hpp"
 
 #include "Pipeline.hpp"
-#include "VideoMemory.hpp"
 
 namespace SrslAPI{
 
@@ -32,7 +31,6 @@ namespace SrslAPI{
 
     private:
         UP<Pipeline> m_Pipeline;
-        UP<VideoMemory> m_VideoMemory;
 
     };
 

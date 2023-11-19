@@ -59,6 +59,10 @@ namespace SrslAPI{
         m_FrameBuffer = frameBuffer;
     }
 
+    void Pipeline::bindConstantBuffer(uint32_t slot, char *data) {
+        m_ConstantBuffers[slot] = data;
+    }
+
     void Pipeline::executeVertexShader(RenderData &data) {
         data.vertices.reserve(m_VertexBuffer->getCount());
         auto& vertices = m_VertexBuffer->getVertices();
@@ -67,7 +71,7 @@ namespace SrslAPI{
         const auto height = static_cast<float>(m_FrameBuffer->m_Height);
 
         for (auto& vertex: vertices){
-            data.vertices.push_back(m_Shader->executeVertexShader(vertex));
+            data.vertices.push_back(m_Shader->executeVertexShader(vertex, m_ConstantBuffers));
 
             auto& processedVertex = data.vertices.back();
 
@@ -116,7 +120,7 @@ namespace SrslAPI{
                     if (alpha >= 0.0f && beta >= 0.0f && gamma >= 0.0f) {
                         InputFragment fragment = interpolate(v0, v1, v2, alpha, beta, gamma);
 
-                        OutputFragment outputFragment = m_Shader->executeFragmentShader(fragment);
+                        OutputFragment outputFragment = m_Shader->executeFragmentShader(fragment, m_ConstantBuffers);
                         glm::vec4 color = outputFragment["SRV_TARGET_0"];
                         m_FrameBuffer->m_ColorAttachments[0]->setPixel(x, y, color.r, color.g, color.b, color.a);
                     }
@@ -134,4 +138,5 @@ namespace SrslAPI{
         }
         return fragment;
     }
+
 }

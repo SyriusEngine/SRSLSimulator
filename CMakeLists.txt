@@ -28,7 +28,11 @@ set(SRSL_GRAPHICS_API_SRC
     src/GraphicsAPI/ShaderImpl.cpp
     src/GraphicsAPI/FrameBuffer.cpp
     src/GraphicsAPI/ColorAttachment.cpp
-    src/GraphicsAPI/stb_image_write.cpp src/GraphicsAPI/FrameBufferImpl.cpp src/GraphicsAPI/FrameBufferImpl.hpp src/GraphicsAPI/VideoMemory.cpp src/GraphicsAPI/VideoMemory.hpp src/GraphicsAPI/ConstantBuffer.cpp src/GraphicsAPI/ConstantBufferImpl.cpp src/GraphicsAPI/ConstantBufferImpl.hpp)
+    src/GraphicsAPI/stb_image_write.cpp
+    src/GraphicsAPI/FrameBufferImpl.cpp
+    src/GraphicsAPI/ConstantBuffer.cpp
+    src/GraphicsAPI/ConstantBufferImpl.cpp
+    )
 
 add_library(SrslAPI SHARED ${SRSL_GRAPHICS_API_SRC})
 target_link_libraries(SrslAPI -lSrslCompiler)

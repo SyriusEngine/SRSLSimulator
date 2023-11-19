@@ -6,6 +6,7 @@
 namespace SrslAPI{
 
     typedef std::unordered_map<std::string, char*> InputVertex;
+    typedef std::unordered_map<uint32_t, char*> ConstantBuffers;
 
     typedef std::unordered_map<std::string, glm::vec4> OutputVertex;
 

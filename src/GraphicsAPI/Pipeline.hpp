@@ -6,6 +6,7 @@
 #include "IndexBufferImpl.hpp"
 #include "ShaderImpl.hpp"
 #include "FrameBufferImpl.hpp"
+#include "ConstantBufferImpl.hpp"
 
 namespace SrslAPI{
 
@@ -30,6 +31,8 @@ namespace SrslAPI{
 
         void setFrameBuffer(FrameBufferImpl* frameBuffer);
 
+        void bindConstantBuffer(uint32_t slot, char* data);
+
         void checkState();
 
     private:
@@ -46,6 +49,8 @@ namespace SrslAPI{
         IndexBufferImpl* m_IndexBuffer;
         ShaderImpl* m_Shader;
         FrameBufferImpl* m_FrameBuffer;
+
+        ConstantBuffers m_ConstantBuffers;
 
     };
 

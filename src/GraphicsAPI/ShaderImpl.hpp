@@ -7,7 +7,6 @@
 #include <glm/glm.hpp>
 #include <iostream>
 #include "Primitives.hpp"
-#include "VideoMemory.hpp"
 
 #define COMPILED_SRSL_NAME "comp.cpp"
 #define COMPILED_VS_NAME "comp-vs.cpp"
@@ -15,26 +14,26 @@
 
 namespace SrslAPI{
 
-    typedef std::unordered_map<std::string, glm::vec4> (*VertexShaderMain)(const std::unordered_map<std::string, char*>&, VideoMemory*);
-    typedef std::unordered_map<std::string, glm::vec4> (*FragmentShaderMain)(const std::unordered_map<std::string, glm::vec4>&, VideoMemory*);
+    typedef std::unordered_map<std::string, glm::vec4> (*VertexShaderMain)(const std::unordered_map<std::string, char*>&, std::unordered_map<uint32_t, char*>&);
+    typedef std::unordered_map<std::string, glm::vec4> (*FragmentShaderMain)(const std::unordered_map<std::string, glm::vec4>&, std::unordered_map<uint32_t, char*>&);
 
     class Pipeline;
 
     class ShaderImpl: public Shader{
     public:
         ShaderImpl(const std::string& vertexShader, const std::string& fragmentShader,
-                   const UP<Pipeline>& pipeline, const UP<VideoMemory>& videoMemory);
+                   const UP<Pipeline>& pipeline);
 
         ~ShaderImpl() override;
 
         void bind() override;
 
-        inline OutputVertex executeVertexShader(InputVertex& input){
-            return m_VertexShaderEntry(input, m_VideoMemory.get());
+        inline OutputVertex executeVertexShader(InputVertex& input, ConstantBuffers& cbs){
+            return m_VertexShaderEntry(input, cbs);
         }
 
-        inline OutputFragment executeFragmentShader(const InputFragment& input){
-            return m_FragmentShaderEntry(input, m_VideoMemory.get());
+        inline OutputFragment executeFragmentShader(const InputFragment& input, ConstantBuffers& cbs){
+            return m_FragmentShaderEntry(input, cbs);
         }
 
     private:
@@ -49,7 +48,6 @@ namespace SrslAPI{
 
     private:
         const UP<Pipeline>& m_Pipeline;
-        const UP<VideoMemory>& m_VideoMemory;
 
         UP<Srsl::ShaderModule> m_VertexShaderModule;
         UP<Srsl::ShaderModule> m_FragmentShaderModule;

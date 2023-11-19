@@ -2,7 +2,6 @@
 
 #include "../../include/GraphicsAPI/ConstantBuffer.hpp"
 #include "Primitives.hpp"
-#include "VideoMemory.hpp"
 
 namespace SrslAPI{
 
@@ -10,7 +9,7 @@ namespace SrslAPI{
 
     class ConstantBufferImpl: public ConstantBuffer{
     public:
-        ConstantBufferImpl(const ConstantBufferDesc& desc, const UP<Pipeline>& pipeline, const UP<VideoMemory>& videoMemory);
+        ConstantBufferImpl(const ConstantBufferDesc& desc, const UP<Pipeline>& pipeline);
 
         ~ConstantBufferImpl() override = default;
 
@@ -20,7 +19,7 @@ namespace SrslAPI{
 
     private:
         const UP<Pipeline>& m_Pipeline;
-        const UP<VideoMemory>& m_VideoMemory;
+        UP<char[]> m_Data;
 
     };
 
