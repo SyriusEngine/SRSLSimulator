@@ -17,6 +17,7 @@ ConstantBuffer(slot = 0) ModelData{
 };
 
 void main(){
-    vsOut.position = float4(vsIn.position, 1.0);
+    float4 extPos = float4(vsIn.position, 1.0);
+    vsOut.position = ModelData.modelMatrix * extPos;
     vsOut.color = float4(vsIn.color, 1.0);
 }

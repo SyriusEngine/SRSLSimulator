@@ -1,6 +1,7 @@
 #include <iostream>
 #include <chrono>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "include/GraphicsAPI/SrslAPI.hpp"
 
 struct Vertex{
@@ -84,7 +85,16 @@ int main(int argc, char** argv) {
 
         std::cout << "Frame time: " << postFrame - preFrame << std::endl;
 
-        fb->getColorAttachment(0)->save("test.png");
+        fb->getColorAttachment(0)->save("normal.png");
+
+        fb->getColorAttachment(0)->clear();
+        modelData = glm::translate(modelData, glm::vec3(0.5f, 0.0f, 0.0f));
+        cb->setData(&modelData, sizeof(glm::mat4));
+        cb->bind();
+        ctx->draw();
+
+        fb->getColorAttachment(0)->save("rotated.png");
+
 
 
 

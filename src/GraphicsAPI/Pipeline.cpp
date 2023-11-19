@@ -19,11 +19,6 @@ namespace SrslAPI{
         RenderData data;
 
         executeVertexShader(data);
-        // TODO: remove this later
-        for (auto& vertex: data.vertices){
-            printf("Vertex Position NDC: %f, %f, %f\n", vertex["SRV_POSITION"].x, vertex["SRV_POSITION"].y, vertex["SRV_POSITION"].z);
-            printf("Vertex SSC: %f, %f, %f\n", vertex["SRV_FRAGCOORD"].x, vertex["SRV_FRAGCOORD"].y, vertex["SRV_FRAGCOORD"].z);
-        }
         rasterize(data);
     }
 
