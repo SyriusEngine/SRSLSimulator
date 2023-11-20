@@ -23,6 +23,14 @@ namespace SrslAPI{
 
         void save(const std::string& path) const;
 
+        [[nodiscard]] const std::vector<uint8_t>& getData() const { return m_Data; }
+
+        [[nodiscard]] uint32_t getWidth() const { return m_Width; }
+
+        [[nodiscard]] uint32_t getHeight() const { return m_Height; }
+
+        [[nodiscard]] uint8_t getChannelCount() const { return m_ChannelCount; }
+
     protected:
         uint32_t m_Width;
         uint32_t m_Height;

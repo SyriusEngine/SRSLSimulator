@@ -37,14 +37,17 @@ set(SRSL_GRAPHICS_API_SRC
 add_library(SrslAPI SHARED ${SRSL_GRAPHICS_API_SRC})
 target_link_libraries(SrslAPI -lSrslCompiler)
 
-add_executable(SrslSimulator main.cpp)
-target_link_libraries(SrslSimulator -lSrslAPI)
 
+include_directories(./include/)
+include_directories(./Dependencies/SyriusCore/include/)
 
+file(GLOB SYRIUSCORE_DLL "./Dependencies/SyriusCore/bin/*.dll")
+file(COPY ${SYRIUSCORE_DLL} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/SyriusShadingLanguage)
 
+set(SIMULATOR_SRC
+    src/Simulator/Simulator.cpp
+    )
 
-###########################################################################
+add_executable(SrslSimulator main.cpp ${SIMULATOR_SRC})
+target_link_libraries(SrslSimulator -lSrslAPI -lSyriusCore)
 
-# TEMPORARY EXECUTABLE FOR TESTING
-
-###########################################################################
