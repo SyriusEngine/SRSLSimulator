@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SimulatorInclude.hpp"
+#include "Profiler.hpp"
 
 namespace Simulator{
 

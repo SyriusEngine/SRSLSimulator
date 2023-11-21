@@ -14,6 +14,7 @@ namespace Simulator{
         Syrius::ContextDesc contextDesc;
         contextDesc.api = SR_API_OPENGL;
         m_OpenGLContext = m_Window->createContext(contextDesc);
+        m_OpenGLContext->setVerticalSynchronisation(true);
         m_Window->createImGuiContext();
 
         setupSrslAPI();
@@ -39,6 +40,7 @@ namespace Simulator{
     }
 
     void Simulator::setupSrslAPI() {
+        SIM_START_TIME("SrslAPI Setup");
         m_SrslContext = createContext();
 
         m_VertexLayout = m_SrslContext->createVertexLayout();
@@ -61,11 +63,10 @@ namespace Simulator{
         };
         m_IndexBuffer = m_SrslContext->createIndexBuffer(indices.data(), indices.size());
 
-        auto start_time = std::chrono::high_resolution_clock::now();
+        SIM_START_TIME("Shader compilation")
         m_Shader = m_SrslContext->createShader("./SRSLShaders/Basic-vs.srsl", "./SRSLShaders/Basic-fs.srsl");
         auto end_time = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-        std::cout << "Shader compilation time: " << duration.count() << " ms" << std::endl;
+        SIM_STOP_TIME("Shader compilation")
 
         ColorAttachmentDesc desc;
         desc.width = SIM_WIDTH;
@@ -90,19 +91,23 @@ namespace Simulator{
         cbd.data = &modelData;
         m_ConstantBuffer = m_SrslContext->createConstantBuffer(cbd);
 
+        SIM_STOP_TIME("SrslAPI Setup");
     }
 
     void Simulator::setupOpenGL() {
+        SIM_START_TIME("OpenGL Setup");
         Syrius::Texture2DDesc desc;
         desc.width = SIM_WIDTH;
         desc.height = SIM_HEIGHT;
         desc.format = SR_TEXTURE_RGBA_UI8;
         desc.data = m_FrameBuffer->getColorAttachment(0)->getData().data();
         m_Texture = m_OpenGLContext->createTexture2D(desc);
+        SIM_STOP_TIME("OpenGL Setup");
 
     }
 
     void Simulator::renderSrsl() {
+        SIM_START_TIME("SRSL API Render");
         m_FrameBuffer->bind();
         m_VertexBuffer->bind();
         m_IndexBuffer->bind();
@@ -110,6 +115,8 @@ namespace Simulator{
         m_Shader->bind();
 
         m_SrslContext->draw();
+
+        SIM_STOP_TIME("SRSL API Render");
     }
 
     void Simulator::renderImGui() {
@@ -123,6 +130,17 @@ namespace Simulator{
             renderSrsl();
             m_Texture->setData(m_FrameBuffer->getColorAttachment(0)->getData().data(), 0, 0, SIM_WIDTH, SIM_HEIGHT);
         }
+        // render timers in a table
+        ImGui::Columns(2, "Timers");
+        ImGui::Separator();
+        ImGui::Text("Name"); ImGui::NextColumn();
+        ImGui::Text("Time"); ImGui::NextColumn();
+        ImGui::Separator();
+        for (auto& timer : Timers::getDurations()) {
+            ImGui::Text("%s", timer.first.c_str()); ImGui::NextColumn();
+            ImGui::Text("%llu ms", timer.second); ImGui::NextColumn();
+        }
+
         ImGui::End();
 
         ImGui::SetNextWindowPos(ImVec2(SIM_WIDTH / 5, 0));
