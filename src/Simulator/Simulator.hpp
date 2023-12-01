@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SimulatorInclude.hpp"
-#include "Profiler.hpp"
+#include "GraphicsAPI/Profiler.hpp"
 
 namespace Simulator{
 
@@ -36,7 +36,6 @@ namespace Simulator{
         UP<ConstantBuffer> m_ConstantBuffer;
 
         Syrius::ResourceView<Syrius::Texture2D> m_Texture;
-
 
     };
 }

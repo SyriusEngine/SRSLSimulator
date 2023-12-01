@@ -32,6 +32,7 @@ set(SRSL_GRAPHICS_API_SRC
     src/GraphicsAPI/FrameBufferImpl.cpp
     src/GraphicsAPI/ConstantBuffer.cpp
     src/GraphicsAPI/ConstantBufferImpl.cpp
+    src/GraphicsAPI/Profiler.cpp
     )
 
 add_library(SrslAPI SHARED ${SRSL_GRAPHICS_API_SRC})
@@ -46,7 +47,7 @@ file(COPY ${SYRIUSCORE_DLL} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/SyriusShadin
 
 set(SIMULATOR_SRC
     src/Simulator/Simulator.cpp
-    src/Simulator/Profiler.cpp src/Simulator/Profiler.hpp)
+)
 
 add_executable(SrslSimulator main.cpp ${SIMULATOR_SRC})
 target_link_libraries(SrslSimulator -lSrslAPI -lSyriusCore)

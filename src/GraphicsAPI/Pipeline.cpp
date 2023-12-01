@@ -1,4 +1,5 @@
 #include "Pipeline.hpp"
+#include "../../include/GraphicsAPI/Profiler.hpp"
 
 namespace SrslAPI{
 
@@ -18,8 +19,13 @@ namespace SrslAPI{
         checkState();
         RenderData data;
 
+
+        SIM_START_TIME("RENDER::Vertex_shader")
         executeVertexShader(data);
+        SIM_STOP_TIME("RENDER::Vertex_shader")
+        SIM_START_TIME("RENDER::Rasterizer")
         rasterize(data);
+        SIM_STOP_TIME("RENDER::Rasterizer")
     }
 
     void Pipeline::checkState() {
