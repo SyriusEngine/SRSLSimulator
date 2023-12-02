@@ -1,6 +1,7 @@
 #include <fstream>
 #include "ShaderImpl.hpp"
 #include "Pipeline.hpp"
+#include "../../../include/GraphicsAPI/Profiler.hpp"
 
 namespace SrslAPI{
 
@@ -24,7 +25,9 @@ namespace SrslAPI{
 
     void ShaderImpl::bind() {
         if (m_ShaderModule == nullptr) {
+            SIM_START_TIME("Shader::LoadExecutable");
             loadExecutable();
+            SIM_STOP_TIME("Shader::LoadExecutable");
         }
         m_Pipeline->setShader(this);
     }
