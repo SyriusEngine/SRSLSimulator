@@ -15,23 +15,27 @@ include_directories(./SyriusShadingLanguage/include/)
 link_directories(./cmake-build-debug/)
 link_directories(./cmake-build-debug/SyriusShadingLanguage/)
 
+set(SRSL_API_DEPENDECIES_SRC
+    src/GraphicsAPI/Dependencies/stb_image_write.cpp
+)
+
 set(SRSL_GRAPHICS_API_SRC
-    src/GraphicsAPI/Pipeline.cpp
-    src/GraphicsAPI/ContextImpl.cpp
+    ${SRSL_API_DEPENDECIES_SRC}
+    src/GraphicsAPI/Impl/Pipeline.cpp
+    src/GraphicsAPI/Impl/ContextImpl.cpp
     src/GraphicsAPI/SrslAPI.cpp
     src/GraphicsAPI/VertexLayout.cpp
     src/GraphicsAPI/Include.cpp
     src/GraphicsAPI/Context.cpp
-    src/GraphicsAPI/VertexBufferImpl.cpp
-    src/GraphicsAPI/IndexBufferImpl.cpp
+    src/GraphicsAPI/Impl/VertexBufferImpl.cpp
+    src/GraphicsAPI/Impl/IndexBufferImpl.cpp
     src/GraphicsAPI/Shader.cpp
-    src/GraphicsAPI/ShaderImpl.cpp
+    src/GraphicsAPI/Impl/ShaderImpl.cpp
     src/GraphicsAPI/FrameBuffer.cpp
     src/GraphicsAPI/ColorAttachment.cpp
-    src/GraphicsAPI/stb_image_write.cpp
-    src/GraphicsAPI/FrameBufferImpl.cpp
+    src/GraphicsAPI/Impl/FrameBufferImpl.cpp
     src/GraphicsAPI/ConstantBuffer.cpp
-    src/GraphicsAPI/ConstantBufferImpl.cpp
+    src/GraphicsAPI/Impl/ConstantBufferImpl.cpp
     src/GraphicsAPI/Profiler.cpp
     )
 

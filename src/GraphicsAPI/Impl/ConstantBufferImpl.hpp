@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../include/GraphicsAPI/ConstantBuffer.hpp"
-#include "Primitives.hpp"
+#include "GraphicsAPI/ConstantBuffer.hpp"
+#include "../Primitives.hpp"
 
 namespace SrslAPI{
 

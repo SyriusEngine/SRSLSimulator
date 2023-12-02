@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../include/GraphicsAPI/Context.hpp"
+#include "GraphicsAPI/Context.hpp"
 #include "VertexBufferImpl.hpp"
 #include "IndexBufferImpl.hpp"
 #include "ShaderImpl.hpp"

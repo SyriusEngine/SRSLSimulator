@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../../include/GraphicsAPI/Shader.hpp"
-#include "../../SyriusShadingLanguage/include/SrslCompiler.hpp"
+#include "GraphicsAPI/Shader.hpp"
+#include "SrslCompiler.hpp"
 #include <filesystem>
 #include <windows.h>
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 #include <iostream>
-#include "Primitives.hpp"
+#include "../Primitives.hpp"
 
 #define COMPILED_SRSL_NAME "comp.cpp"
 #define COMPILED_VS_NAME "comp-vs.cpp"

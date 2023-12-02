@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../include/GraphicsAPI/IndexBuffer.hpp"
-#include "Primitives.hpp"
+#include "GraphicsAPI/IndexBuffer.hpp"
+#include "../Primitives.hpp"
 
 namespace SrslAPI {
 

@@ -1,5 +1,5 @@
 #include "../../include/GraphicsAPI/ColorAttachment.hpp"
-#include "stb_image_write.hpp"
+#include "Dependencies/stb_image_write.hpp"
 
 namespace SrslAPI{
 

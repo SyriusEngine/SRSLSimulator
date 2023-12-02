@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../include/GraphicsAPI/Include.hpp"
-#include "Primitives.hpp"
+#include "GraphicsAPI/Include.hpp"
+#include "../Primitives.hpp"
 #include "VertexBufferImpl.hpp"
 #include "IndexBufferImpl.hpp"
 #include "ShaderImpl.hpp"

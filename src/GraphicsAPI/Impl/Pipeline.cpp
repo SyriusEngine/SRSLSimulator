@@ -1,5 +1,5 @@
 #include "Pipeline.hpp"
-#include "../../include/GraphicsAPI/Profiler.hpp"
+#include "GraphicsAPI/Profiler.hpp"
 
 namespace SrslAPI{
 

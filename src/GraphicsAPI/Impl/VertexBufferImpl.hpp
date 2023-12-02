@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../include/GraphicsAPI/VertexBuffer.hpp"
-#include "Primitives.hpp"
+#include "GraphicsAPI/VertexBuffer.hpp"
+#include "../Primitives.hpp"
 
 namespace SrslAPI{
 
