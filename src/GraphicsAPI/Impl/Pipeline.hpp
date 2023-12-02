@@ -51,7 +51,8 @@ namespace SrslAPI{
         FrameBufferImpl* m_FrameBuffer;
 
         ConstantBuffers m_ConstantBuffers;
-
+        Textures m_Textures;
+        Samplers m_Samplers;
     };
 
 }

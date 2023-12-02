@@ -16,19 +16,9 @@ ConstantBuffer(slot = 0) ModelData{
     float4x4 modelMatrix;
 };
 
-float4 processVertex(float4 extPos){
-    for (uint i = 0; i < 9; i++){
-        extPos.x = extPos.x + 0.5f;
-        if (extPos.x > 1.0f){
-            extPos.x = -1.0f;
-        }
-    }
-    return extPos;
-}
-
 void main(){
     float4 extPos = float4(vsIn.position, 1.0);
     extPos = ModelData.modelMatrix * extPos;
-    vsOut.position = processVertex(extPos);
+    vsOut.position = extPos;
     vsOut.color = float4(vsIn.color, 1.0);
 }

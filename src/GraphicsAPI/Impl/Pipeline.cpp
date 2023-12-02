@@ -7,7 +7,8 @@ namespace SrslAPI{
     m_VertexBuffer(nullptr),
     m_IndexBuffer(nullptr),
     m_Shader(nullptr),
-    m_FrameBuffer(nullptr){
+    m_FrameBuffer(nullptr),
+    m_ConstantBuffers(MAX_CONSTANT_BUFFER_COUNT){
 
     }
 
