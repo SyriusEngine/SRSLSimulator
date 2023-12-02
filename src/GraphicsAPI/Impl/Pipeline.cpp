@@ -128,9 +128,14 @@ namespace SrslAPI{
                     if (alpha >= 0.0f && beta >= 0.0f && gamma >= 0.0f) {
                         InputFragment fragment = interpolate(v0, v1, v2, alpha, beta, gamma);
 
-                        OutputFragment outputFragment = m_Shader->executeFragmentShader(fragment, m_ConstantBuffers, m_Textures, m_Samplers);
-                        glm::vec4 color = outputFragment["SRV_TARGET_0"];
-                        m_FrameBuffer->m_ColorAttachments[0]->setPixel(x, y, color.r, color.g, color.b, color.a);
+                        try{
+                            OutputFragment outputFragment = m_Shader->executeFragmentShader(fragment, m_ConstantBuffers, m_Textures, m_Samplers);
+                            glm::vec4 color = outputFragment["SRV_TARGET_0"];
+                            m_FrameBuffer->m_ColorAttachments[0]->setPixel(x, y, color.r, color.g, color.b, color.a);
+                        }
+                        catch (int){
+                            // do nothing as the pixel is discarded
+                        }
                     }
                 }
             }

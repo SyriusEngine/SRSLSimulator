@@ -15,5 +15,8 @@ Sampler(slot = 0) sampler0;
 
 void main() {
     float4 texel = sampleTexture(albedo, sampler0, fsIn.texCoords);
+    if (texel.a < 0.1f){
+        discard;
+    }
     fsOut.color = texel;
 }
