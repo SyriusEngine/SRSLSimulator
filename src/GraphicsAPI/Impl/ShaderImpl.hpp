@@ -15,7 +15,7 @@
 namespace SrslAPI{
 
     typedef std::unordered_map<std::string, glm::vec4> (*VertexShaderMain)(const std::unordered_map<std::string, char*>&, std::vector<char*>&);
-    typedef std::unordered_map<std::string, glm::vec4> (*FragmentShaderMain)(const std::unordered_map<std::string, glm::vec4>&, std::vector<char*>&);
+    typedef std::unordered_map<std::string, glm::vec4> (*FragmentShaderMain)(const std::unordered_map<std::string, glm::vec4>&, std::vector<char*>&, std::vector<char*>&, std::vector<char*>&);
 
     class Pipeline;
 
@@ -32,8 +32,8 @@ namespace SrslAPI{
             return m_VertexShaderEntry(input, cbs);
         }
 
-        inline OutputFragment executeFragmentShader(const InputFragment& input, ConstantBuffers& cbs){
-            return m_FragmentShaderEntry(input, cbs);
+        inline OutputFragment executeFragmentShader(const InputFragment& input, ConstantBuffers& cbs, Textures& textures, Samplers& samplers){
+            return m_FragmentShaderEntry(input, cbs, textures, samplers);
         }
 
     private:
