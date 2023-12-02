@@ -34,8 +34,10 @@ namespace Simulator{
         UP<Shader> m_Shader;
         UP<FrameBuffer> m_FrameBuffer;
         UP<ConstantBuffer> m_ConstantBuffer;
+        UP<Texture2D> m_Texture;
 
-        Syrius::ResourceView<Syrius::Texture2D> m_Texture;
+
+        Syrius::ResourceView<Syrius::Texture2D> m_RenderTexture;
 
     };
 }

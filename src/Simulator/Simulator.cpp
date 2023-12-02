@@ -91,6 +91,10 @@ namespace Simulator{
         cbd.data = &modelData;
         m_ConstantBuffer = m_SrslContext->createConstantBuffer(cbd);
 
+        ImageDesc imgDesc;
+        imgDesc.flipOnLoad = true;
+        imgDesc.path = "./Resources/Textures/awesomeface.png";
+        m_Texture = m_SrslContext->createTexture2D(imgDesc);
         SIM_STOP_TIME("SrslAPI Setup");
     }
 
@@ -101,7 +105,7 @@ namespace Simulator{
         desc.height = SIM_HEIGHT;
         desc.format = SR_TEXTURE_RGBA_UI8;
         desc.data = m_FrameBuffer->getColorAttachment(0)->getData().data();
-        m_Texture = m_OpenGLContext->createTexture2D(desc);
+        m_RenderTexture = m_OpenGLContext->createTexture2D(desc);
         SIM_STOP_TIME("OpenGL Setup");
 
     }
@@ -113,6 +117,7 @@ namespace Simulator{
         m_IndexBuffer->bind();
         m_ConstantBuffer->bind();
         m_Shader->bind();
+        m_Texture->bind(0);
 
         m_SrslContext->draw();
 
@@ -128,7 +133,7 @@ namespace Simulator{
 
         if (ImGui::Button("Render SRSL")) {
             renderSrsl();
-            m_Texture->setData(m_FrameBuffer->getColorAttachment(0)->getData().data(), 0, 0, SIM_WIDTH, SIM_HEIGHT);
+            m_RenderTexture->setData(m_FrameBuffer->getColorAttachment(0)->getData().data(), 0, 0, SIM_WIDTH, SIM_HEIGHT);
         }
         // render timers in a table
         ImGui::Columns(2, "Timers");
@@ -146,7 +151,7 @@ namespace Simulator{
         ImGui::SetNextWindowPos(ImVec2(SIM_WIDTH / 5, 0));
         ImGui::SetNextWindowSize(ImVec2( 4 * SIM_WIDTH / 5 , SIM_HEIGHT));
         ImGui::Begin("Render", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
-        ImGui::Image((void*)m_Texture->getIdentifier(), ImVec2(2 * SIM_WIDTH / 3, 2 * SIM_HEIGHT / 3), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void*)m_RenderTexture->getIdentifier(), ImVec2(2 * SIM_WIDTH / 3, 2 * SIM_HEIGHT / 3), ImVec2(0, 1), ImVec2(1, 0));
         ImGui::End();
 
         m_Window->onImGuiEnd();

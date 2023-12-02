@@ -7,6 +7,7 @@
 #include "ShaderImpl.hpp"
 #include "FrameBufferImpl.hpp"
 #include "ConstantBufferImpl.hpp"
+#include "Texture2DImpl.hpp"
 
 namespace SrslAPI{
 
@@ -32,6 +33,8 @@ namespace SrslAPI{
         void setFrameBuffer(FrameBufferImpl* frameBuffer);
 
         void bindConstantBuffer(uint32_t slot, char* data);
+
+        void bindTexture(uint32_t slot, char* data);
 
         void checkState();
 

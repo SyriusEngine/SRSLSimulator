@@ -34,4 +34,12 @@ namespace SrslAPI{
     UP<ConstantBuffer> ContextImpl::createConstantBuffer(const ConstantBufferDesc &desc) const {
         return createUP<ConstantBufferImpl>(desc, m_Pipeline);
     }
+
+    UP<Texture2D> ContextImpl::createTexture2D(const Texture2DDesc &desc) const {
+        return createUP<Texture2DImpl>(desc, m_Pipeline.get());
+    }
+
+    UP<Texture2D> ContextImpl::createTexture2D(const ImageDesc &desc) const {
+        return createUP<Texture2DImpl>(desc, m_Pipeline.get());
+    }
 }

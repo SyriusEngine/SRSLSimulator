@@ -17,6 +17,7 @@ link_directories(./cmake-build-debug/SyriusShadingLanguage/)
 
 set(SRSL_API_DEPENDECIES_SRC
     src/GraphicsAPI/Dependencies/stb_image_write.cpp
+    src/GraphicsAPI/Dependencies/stb_image.cpp
 )
 
 set(SRSL_GRAPHICS_API_SRC
@@ -37,7 +38,10 @@ set(SRSL_GRAPHICS_API_SRC
     src/GraphicsAPI/ConstantBuffer.cpp
     src/GraphicsAPI/Impl/ConstantBufferImpl.cpp
     src/GraphicsAPI/Profiler.cpp
-    )
+    src/GraphicsAPI/Texture2D.cpp
+    src/GraphicsAPI/Impl/Texture2DImpl.cpp
+    src/GraphicsAPI/Impl/Texture2DImpl.hpp
+)
 
 add_library(SrslAPI SHARED ${SRSL_GRAPHICS_API_SRC})
 target_link_libraries(SrslAPI -lSrslCompiler)

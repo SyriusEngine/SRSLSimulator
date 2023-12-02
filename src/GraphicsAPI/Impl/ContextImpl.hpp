@@ -6,6 +6,7 @@
 #include "ShaderImpl.hpp"
 #include "FrameBufferImpl.hpp"
 #include "ConstantBufferImpl.hpp"
+#include "Texture2DImpl.hpp"
 
 #include "Pipeline.hpp"
 
@@ -26,6 +27,10 @@ namespace SrslAPI{
         [[nodiscard]] UP<FrameBuffer> createFrameBuffer(const FrameBufferLayout& layout) const override;
 
         [[nodiscard]] UP<ConstantBuffer> createConstantBuffer(const ConstantBufferDesc& desc) const override;
+
+        [[nodiscard]] UP<Texture2D> createTexture2D(const Texture2DDesc& desc) const override;
+
+        [[nodiscard]] UP<Texture2D> createTexture2D(const ImageDesc& desc) const override;
 
         void draw() override;
 

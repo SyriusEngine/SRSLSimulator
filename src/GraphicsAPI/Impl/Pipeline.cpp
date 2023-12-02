@@ -65,6 +65,10 @@ namespace SrslAPI{
         m_ConstantBuffers[slot] = data;
     }
 
+    void Pipeline::bindTexture(uint32_t slot, char *data) {
+        m_Textures[slot] = data;
+    }
+
     void Pipeline::executeVertexShader(RenderData &data) {
         data.vertices.reserve(m_VertexBuffer->getCount());
         auto& vertices = m_VertexBuffer->getVertices();
@@ -140,5 +144,6 @@ namespace SrslAPI{
         }
         return fragment;
     }
+
 
 }

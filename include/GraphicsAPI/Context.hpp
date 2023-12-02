@@ -7,6 +7,7 @@
 #include "Shader.hpp"
 #include "FrameBuffer.hpp"
 #include "ConstantBuffer.hpp"
+#include "Texture2D.hpp"
 
 namespace SrslAPI{
 
@@ -27,6 +28,10 @@ namespace SrslAPI{
         [[nodiscard]] virtual UP<FrameBuffer> createFrameBuffer(const FrameBufferLayout& layout) const = 0;
 
         [[nodiscard]] virtual UP<ConstantBuffer> createConstantBuffer(const ConstantBufferDesc& desc) const = 0;
+
+        [[nodiscard]] virtual UP<Texture2D> createTexture2D(const Texture2DDesc& desc) const = 0;
+
+        [[nodiscard]] virtual UP<Texture2D> createTexture2D(const ImageDesc& desc) const = 0;
 
         virtual void draw() = 0;
     };

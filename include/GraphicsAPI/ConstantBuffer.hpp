@@ -4,7 +4,7 @@
 
 namespace SrslAPI{
 
-    struct ConstantBufferDesc{
+    struct SRSL_GRAPHICS_API ConstantBufferDesc{
         std::string name;
         uint32_t size = 0;
         uint32_t slot = 0;
