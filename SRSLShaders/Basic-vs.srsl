@@ -4,13 +4,13 @@ Input vsIn{
     float3 position: Position;
     float3 color: Color;
     float3 normal: Normal;
-    float2 texCoords: TexCoords;
+    float4 texCoords: TexCoords;
 };
 
 Output vsOut{
     float4 position: SRV_POSITION;
     float4 color: Color;
-    float2 texCoords: TexCoords;
+    float4 texCoords: TexCoords;
 };
 
 ConstantBuffer(slot = 0) ModelData{

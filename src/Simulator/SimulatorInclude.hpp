@@ -16,7 +16,7 @@ namespace Simulator{
         float x, y, z;
         float r, g, b;
         float nx, ny, nz;
-        float u, v;
+        float u, v, w, q;
     };
 
     using namespace SrslAPI;

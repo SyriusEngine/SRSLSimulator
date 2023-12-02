@@ -47,13 +47,13 @@ namespace Simulator{
         m_VertexLayout->pushAttribute("Position", SRSL_FLOAT32_3);
         m_VertexLayout->pushAttribute("Color", SRSL_FLOAT32_3);
         m_VertexLayout->pushAttribute("Normal", SRSL_FLOAT32_3);
-        m_VertexLayout->pushAttribute("TexCoords", SRSL_FLOAT32_2);
+        m_VertexLayout->pushAttribute("TexCoords", SRSL_FLOAT32_4);
 
         std::vector<Vertex> rectangle = {
-                {-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -1.f, 0.f, 0.f, 0.f, 0.f},
-                {0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, -1.f, 0.f, 0.f, 1.f, 0.f},
-                {0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, -1.f, 0.f, 0.f, 1.f, 1.f},
-                {-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, -1.f, 0.f, 0.f, 0.f, 1.f}
+                {-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -1.f, 0.f, 0.f, 0.f, 0.f, 0.0f, 0.0f},
+                {0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, -1.f, 0.f, 0.f, 1.f, 0.f, 0.0f, 0.0f},
+                {0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, -1.f, 0.f, 0.f, 1.f, 1.f, 0.0f, 0.0f},
+                {-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, -1.f, 0.f, 0.f, 0.f, 1.f, 0.0f, 0.0f}
         };
         m_VertexBuffer = m_SrslContext->createVertexBuffer(m_VertexLayout, rectangle.data(), rectangle.size() * sizeof(Vertex));
 

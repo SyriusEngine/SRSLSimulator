@@ -3,7 +3,7 @@ ShaderType = Fragment;
 Input fsIn{
     float4 position: SRV_POSITION;
     float4 color: Color;
-    float2 texCoords: TexCoords;
+    float4 texCoords: TexCoords;
 };
 
 Output fsOut{
