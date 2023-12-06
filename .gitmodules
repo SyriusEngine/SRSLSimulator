@@ -1,3 +1,7 @@
-[submodule "SyriusShadingLanguage"]
-	path = SyriusShadingLanguage
+
+[submodule "Dependencies/SyriusShadingLanguage"]
+	path = Dependencies/SyriusShadingLanguage
 	url = https://github.com/SyriusEngine/SyriusShadingLanguage
+[submodule "Dependencies/SyriusCore"]
+	path = Dependencies/SyriusCore
+	url = https://github.com/SyriusEngine/SyriusCore

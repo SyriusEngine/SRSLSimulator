@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GraphicsAPI/Shader.hpp"
-#include "SrslCompiler.hpp"
+#include <SyriusShadingLanguage/include/SrslCompiler.hpp>
 #include <filesystem>
 #include <windows.h>
 #include "glm/glm.hpp"
