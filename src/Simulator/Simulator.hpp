@@ -24,7 +24,7 @@ namespace Simulator{
         void renderImGui();
 
     private:
-        Syrius::Resource<Syrius::SyriusWindow> m_Window;
+        Syrius::Resource<Syrius::Window> m_Window;
         Syrius::ResourceView<Syrius::Context> m_OpenGLContext;
 
         UP<Context> m_SrslContext;
