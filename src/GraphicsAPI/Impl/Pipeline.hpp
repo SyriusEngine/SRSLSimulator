@@ -44,6 +44,8 @@ namespace SrslAPI{
 
         void rasterize(RenderData& data);
 
+        void drawTriangle(OutputVertex& v0, OutputVertex& v1, OutputVertex& v2);
+
         InputFragment interpolate(const OutputVertex& v0, const OutputVertex& v1, const OutputVertex& v2, float alpha, float beta, float gamma);
 
 

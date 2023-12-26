@@ -1,5 +1,6 @@
 #include "Pipeline.hpp"
 #include "GraphicsAPI/Profiler.hpp"
+#include <thread>
 
 namespace SrslAPI{
 
@@ -99,46 +100,43 @@ namespace SrslAPI{
             throw std::runtime_error("Index buffer size is not a multiple of 3");
         }
         const auto& indices = m_IndexBuffer->getData();
-        for (uint64_t i = 0; i < indices.size(); i += 3){
-            auto& v0 = data.vertices[indices[i]];
-            auto& v1 = data.vertices[indices[i + 1]];
-            auto& v2 = data.vertices[indices[i + 2]];
 
-            auto& v0FragCoord = v0["SRV_FRAGCOORD"];
-            auto& v1FragCoord = v1["SRV_FRAGCOORD"];
-            auto& v2FragCoord = v2["SRV_FRAGCOORD"];
+        auto rasterizeThread = [&](uint32 start, uint32 end){
+            for (uint64_t i = start; i < end; i += 3){
+                auto& v0 = data.vertices[indices[i]];
+                auto& v1 = data.vertices[indices[i + 1]];
+                auto& v2 = data.vertices[indices[i + 2]];
 
-            // bounding box
-            uint32_t minX = std::min(v0FragCoord.x, std::min(v1FragCoord.x, v2FragCoord.x));
-            uint32_t minY = std::min(v0FragCoord.y, std::min(v1FragCoord.y, v2FragCoord.y));
-            uint32_t maxX = std::max(v0FragCoord.x, std::max(v1FragCoord.x, v2FragCoord.x));
-            uint32_t maxY = std::max(v0FragCoord.y, std::max(v1FragCoord.y, v2FragCoord.y));
-
-            // loop over the bounding box and check if the pixel is inside the triangle
-            for (uint32_t x = minX; x <= maxX; x++) {
-                for (uint32_t y = minY; y <= maxY; y++) {
-                    float detT = (v1FragCoord.y - v2FragCoord.y) * (v0FragCoord.x - v2FragCoord.x) +
-                                 (v2FragCoord.x - v1FragCoord.x) * (v0FragCoord.y - v2FragCoord.y);
-                    float alpha = ((v1FragCoord.y - v2FragCoord.y) * (x - v2FragCoord.x) +
-                                   (v2FragCoord.x - v1FragCoord.x) * (y - v2FragCoord.y)) / detT;
-                    float beta = ((v2FragCoord.y - v0FragCoord.y) * (x - v2FragCoord.x) +
-                                    (v0FragCoord.x - v2FragCoord.x) * (y - v2FragCoord.y)) / detT;
-                    float gamma = 1.0f - alpha - beta;
-
-                    if (alpha >= 0.0f && beta >= 0.0f && gamma >= 0.0f) {
-                        InputFragment fragment = interpolate(v0, v1, v2, alpha, beta, gamma);
-
-                        try{
-                            OutputFragment outputFragment = m_Shader->executeFragmentShader(fragment, m_ConstantBuffers, m_Textures, m_Samplers);
-                            glm::vec4 color = outputFragment["SRV_TARGET_0"];
-                            m_FrameBuffer->m_ColorAttachments[0]->setPixel(x, y, color.r, color.g, color.b, color.a);
-                        }
-                        catch (int){
-                            // do nothing as the pixel is discarded
-                        }
-                    }
-                }
+                drawTriangle(v0, v1, v2);
             }
+        };
+
+        const auto triangleCount = m_IndexBuffer->getCount() / 3;
+        const auto threadCount = std::thread::hardware_concurrency();
+
+        std::vector<std::thread> threads;
+        threads.reserve(threadCount);
+
+        if (triangleCount < threadCount){
+            for (uint32 i = 0; i < triangleCount; i++){
+                threads.emplace_back(rasterizeThread, i * 3, i * 3 + 3);
+            }
+        }
+        else{
+            // equally divide the triangles between the threads
+            std::cerr << "Drawing more triangles than threads, verify thread division code in case of artifacts" << std::endl;
+            const auto trianglesPerThread = triangleCount / threadCount;
+            const auto trianglesLeft = triangleCount % threadCount;
+
+            for (uint32_t i = 0; i < threadCount; i++){
+                const auto start = i * trianglesPerThread * 3;
+                const auto end = start + trianglesPerThread * 3 + (i == threadCount - 1 ? trianglesLeft * 3 : 0);
+                threads.emplace_back(rasterizeThread, start, end);
+            }
+        }
+
+        for (auto& thread: threads){
+            thread.join();
         }
     }
 
@@ -150,6 +148,44 @@ namespace SrslAPI{
             fragment[key] = alpha * value + beta * v1.at(key) + gamma * v2.at(key);
         }
         return fragment;
+    }
+
+    void Pipeline::drawTriangle(OutputVertex &v0, OutputVertex &v1, OutputVertex &v2) {
+        auto& v0FragCoord = v0["SRV_FRAGCOORD"];
+        auto& v1FragCoord = v1["SRV_FRAGCOORD"];
+        auto& v2FragCoord = v2["SRV_FRAGCOORD"];
+
+        // bounding box
+        uint32_t minX = std::min(v0FragCoord.x, std::min(v1FragCoord.x, v2FragCoord.x));
+        uint32_t minY = std::min(v0FragCoord.y, std::min(v1FragCoord.y, v2FragCoord.y));
+        uint32_t maxX = std::max(v0FragCoord.x, std::max(v1FragCoord.x, v2FragCoord.x));
+        uint32_t maxY = std::max(v0FragCoord.y, std::max(v1FragCoord.y, v2FragCoord.y));
+
+        // loop over the bounding box and check if the pixel is inside the triangle
+        for (uint32_t x = minX; x <= maxX; x++) {
+            for (uint32_t y = minY; y <= maxY; y++) {
+                float detT = (v1FragCoord.y - v2FragCoord.y) * (v0FragCoord.x - v2FragCoord.x) +
+                             (v2FragCoord.x - v1FragCoord.x) * (v0FragCoord.y - v2FragCoord.y);
+                float alpha = ((v1FragCoord.y - v2FragCoord.y) * (x - v2FragCoord.x) +
+                               (v2FragCoord.x - v1FragCoord.x) * (y - v2FragCoord.y)) / detT;
+                float beta = ((v2FragCoord.y - v0FragCoord.y) * (x - v2FragCoord.x) +
+                              (v0FragCoord.x - v2FragCoord.x) * (y - v2FragCoord.y)) / detT;
+                float gamma = 1.0f - alpha - beta;
+
+                if (alpha >= 0.0f && beta >= 0.0f && gamma >= 0.0f) {
+                    InputFragment fragment = interpolate(v0, v1, v2, alpha, beta, gamma);
+
+                    try{
+                        OutputFragment outputFragment = m_Shader->executeFragmentShader(fragment, m_ConstantBuffers, m_Textures, m_Samplers);
+                        glm::vec4 color = outputFragment["SRV_TARGET_0"];
+                        m_FrameBuffer->m_ColorAttachments[0]->setPixel(x, y, color.r, color.g, color.b, color.a);
+                    }
+                    catch (int){
+                        // do nothing as the pixel is discarded
+                    }
+                }
+            }
+        }
     }
 
 
