@@ -66,7 +66,7 @@ namespace SrslAPI{
         m_ExecutablePath = m_OutputPath.string();
         m_ExecutablePath += "/__shader__" + std::to_string(reinterpret_cast<uint64_t>(this)) + ".dll";
 
-        std::string cmd = "g++ -shared -std=c++17 "; // shared flag for dll
+        std::string cmd = "g++ -g -shared -std=c++17 "; // shared flag for dll, -g for debug symbols
         cmd += "-I./Dependencies ";
         cmd += "-o " + m_ExecutablePath + " ";
         cmd += m_OutputPath.string() + "/" + COMPILED_VS_NAME + " ";

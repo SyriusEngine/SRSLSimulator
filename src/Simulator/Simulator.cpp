@@ -40,7 +40,7 @@ namespace Simulator{
     }
 
     void Simulator::setupSrslAPI() {
-        SIM_START_TIME("SrslAPI Setup");
+        SIM_START_TIME("SrslAPI::Setup");
         m_SrslContext = createContext();
 
         m_VertexLayout = m_SrslContext->createVertexLayout();
@@ -63,10 +63,10 @@ namespace Simulator{
         };
         m_IndexBuffer = m_SrslContext->createIndexBuffer(indices.data(), indices.size());
 
-        SIM_START_TIME("Shader compilation")
+        SIM_START_TIME("SrslAPI::ShaderCompilation")
         m_Shader = m_SrslContext->createShader("./SRSLShaders/Basic-vs.srsl", "./SRSLShaders/Basic-fs.srsl");
         auto end_time = std::chrono::high_resolution_clock::now();
-        SIM_STOP_TIME("Shader compilation")
+        SIM_STOP_TIME("SrslAPI::ShaderCompilation")
 
         ColorAttachmentDesc desc;
         desc.width = SIM_WIDTH;
@@ -95,23 +95,23 @@ namespace Simulator{
         imgDesc.flipOnLoad = true;
         imgDesc.path = "./Resources/Textures/awesomeface.png";
         m_Texture = m_SrslContext->createTexture2D(imgDesc);
-        SIM_STOP_TIME("SrslAPI Setup");
+        SIM_STOP_TIME("SrslAPI::Setup");
     }
 
     void Simulator::setupOpenGL() {
-        SIM_START_TIME("OpenGL Setup");
+        SIM_START_TIME("Syrius::OpenGLSetup");
         Syrius::Texture2DDesc desc;
         desc.width = SIM_WIDTH;
         desc.height = SIM_HEIGHT;
         desc.format = SR_TEXTURE_RGBA_UI8;
         desc.data = m_FrameBuffer->getColorAttachment(0)->getData().data();
         m_RenderTexture = m_OpenGLContext->createTexture2D(desc);
-        SIM_STOP_TIME("OpenGL Setup");
+        SIM_STOP_TIME("Syrius::OpenGLSetup");
 
     }
 
     void Simulator::renderSrsl() {
-        SIM_START_TIME("SRSL API Render");
+        SIM_START_TIME("SrslAPI::Render");
         m_FrameBuffer->bind();
         m_VertexBuffer->bind();
         m_IndexBuffer->bind();
@@ -121,7 +121,7 @@ namespace Simulator{
 
         m_SrslContext->draw();
 
-        SIM_STOP_TIME("SRSL API Render");
+        SIM_STOP_TIME("SrslAPI::Render");
     }
 
     void Simulator::renderImGui() {
