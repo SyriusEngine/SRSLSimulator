@@ -47,6 +47,7 @@ namespace SrslAPI{
         }
         Srsl::CppDescriptor cppDescriptor;
         cppDescriptor.outputFile = m_OutputPath.string() + "/" + COMPILED_SRSL_NAME;
+        cppDescriptor.exportDebugInfo = true;
         m_ShaderProgram->exportCpp(cppDescriptor);
     }
 
