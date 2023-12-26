@@ -24,6 +24,8 @@ namespace Simulator{
         void renderImGui();
 
     private:
+        glm::vec3 m_Translation;
+
         Syrius::Resource<Syrius::Window> m_Window;
         Syrius::ResourceView<Syrius::Context> m_OpenGLContext;
 

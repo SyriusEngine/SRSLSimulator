@@ -3,7 +3,8 @@
 
 namespace Simulator{
 
-    Simulator::Simulator() {
+    Simulator::Simulator():
+    m_Translation(glm::vec3(0.0f, 0.0f, 0.0f)){
         Syrius::WindowDesc windowDesc;
         windowDesc.title = "Simulator";
         windowDesc.width = SIM_WIDTH;
@@ -51,9 +52,9 @@ namespace Simulator{
 
         std::vector<Vertex> rectangle = {
                 {-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -1.f, 0.f, 0.f, 0.f, 0.f, 0.0f, 0.0f},
-                {0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, -1.f, 0.f, 0.f, 1.f, 0.f, 0.0f, 0.0f},
-                {0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, -1.f, 0.f, 0.f, 1.f, 1.f, 0.0f, 0.0f},
-                {-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, -1.f, 0.f, 0.f, 0.f, 1.f, 0.0f, 0.0f}
+                {0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, -1.f, 0.f, 0.f, 2.f, 0.f, 0.0f, 0.0f},
+                {0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, -1.f, 0.f, 0.f, 2.f, 2.f, 0.0f, 0.0f},
+                {-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, -1.f, 0.f, 0.f, 0.f, 2.f, 0.0f, 0.0f}
         };
         m_VertexBuffer = m_SrslContext->createVertexBuffer(m_VertexLayout, rectangle.data(), rectangle.size() * sizeof(Vertex));
 
@@ -112,6 +113,8 @@ namespace Simulator{
 
     void Simulator::renderSrsl() {
         SIM_START_TIME("SrslAPI::Render");
+        m_FrameBuffer->getColorAttachment(0)->clear();
+
         m_FrameBuffer->bind();
         m_VertexBuffer->bind();
         m_IndexBuffer->bind();
@@ -144,6 +147,16 @@ namespace Simulator{
         for (auto& timer : Timers::getDurations()) {
             ImGui::Text("%s", timer.first.c_str()); ImGui::NextColumn();
             ImGui::Text("%llu ms", timer.second); ImGui::NextColumn();
+        }
+        ImGui::Separator();
+        ImGui::Columns(1);
+
+        float translation[3] = {m_Translation.x, m_Translation.y, m_Translation.z};
+        if (ImGui::DragFloat3("Translation", translation, 0.1f)) {
+            m_Translation = glm::vec3(translation[0], translation[1], translation[2]);
+            glm::mat4 modelData(1.0f);
+            modelData = glm::translate(modelData, m_Translation);
+            m_ConstantBuffer->setData(&modelData, sizeof(glm::mat4));
         }
 
         ImGui::End();

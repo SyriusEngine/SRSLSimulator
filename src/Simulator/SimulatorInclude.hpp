@@ -8,7 +8,7 @@
 #include <chrono>
 
 #define SIM_WIDTH 1280
-#define SIM_HEIGHT 780
+#define SIM_HEIGHT 720
 
 namespace Simulator{
 

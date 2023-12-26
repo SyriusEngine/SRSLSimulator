@@ -25,6 +25,10 @@ namespace SrslAPI{
 
     void ColorAttachment::setPixel(uint32_t x, uint32_t y, float r, float g, float b, float a) {
         uint32_t index = (y * m_Width + x) * m_ChannelCount;
+        // check if bounding box requested a pixel outside the image
+        if (index >= m_Data.size()){
+            return;
+        }
         m_Data[index] = static_cast<uint8_t>(r * 255);
         m_Data[index + 1] = static_cast<uint8_t>(g * 255);
         m_Data[index + 2] = static_cast<uint8_t>(b * 255);
