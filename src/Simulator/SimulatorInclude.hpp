@@ -2,13 +2,16 @@
 
 #include <SyriusCore/SyriusCore.hpp>
 #include <GraphicsAPI/SrslAPI.hpp>
+#include <nlohmann/json.hpp>
+#include <EasyIni/EasyIni.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
 #include <chrono>
 
-#define SIM_WIDTH 1280
-#define SIM_HEIGHT 720
+#define SIM_WIDTH 1920
+#define SIM_HEIGHT 1080
 
 namespace Simulator{
 

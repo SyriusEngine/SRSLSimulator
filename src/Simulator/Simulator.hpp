@@ -1,45 +1,29 @@
 #pragma once
 
 #include "SimulatorInclude.hpp"
+#include "SimulatorStore.hpp"
 #include "GraphicsAPI/Profiler.hpp"
+#include "Panels/NavBar.hpp"
 
 namespace Simulator{
 
     class Simulator{
     public:
-        Simulator();
+        explicit Simulator(const std::string& configFile);
 
-        ~Simulator() = default;
+        ~Simulator();
 
         void run();
 
-        void setupSrslAPI();
-
-        void setupOpenGL();
-
     private:
 
-        void renderSrsl();
+        void drawImGui();
 
-        void renderImGui();
+        void setupPanels();
 
     private:
-        glm::vec3 m_Translation;
+        SimulatorStore m_Store;
 
-        Syrius::Resource<Syrius::Window> m_Window;
-        Syrius::ResourceView<Syrius::Context> m_OpenGLContext;
-
-        UP<Context> m_SrslContext;
-        UP<VertexBuffer> m_VertexBuffer;
-        UP<VertexLayout> m_VertexLayout;
-        UP<IndexBuffer> m_IndexBuffer;
-        UP<Shader> m_Shader;
-        UP<FrameBuffer> m_FrameBuffer;
-        UP<ConstantBuffer> m_ConstantBuffer;
-        UP<Texture2D> m_Texture;
-
-
-        Syrius::ResourceView<Syrius::Texture2D> m_RenderTexture;
 
     };
 }

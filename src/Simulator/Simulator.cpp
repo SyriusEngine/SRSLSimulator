@@ -3,171 +3,69 @@
 
 namespace Simulator{
 
-    Simulator::Simulator():
-    m_Translation(glm::vec3(0.0f, 0.0f, 0.0f)){
+    Simulator::Simulator(const std::string& configFile):
+    m_Store(configFile){
         Syrius::WindowDesc windowDesc;
         windowDesc.title = "Simulator";
-        windowDesc.width = SIM_WIDTH;
-        windowDesc.height = SIM_HEIGHT;
+        windowDesc.width = m_Store.config["UI"]["WindowWidth"].getOrDefault<uint32>(SIM_WIDTH);
+        windowDesc.height = m_Store.config["UI"]["WindowHeight"].getOrDefault<uint32>(SIM_HEIGHT);
+        windowDesc.xPos = m_Store.config["UI"]["WindowPosX"].getOrDefault<int32>(200);
+        windowDesc.yPos = m_Store.config["UI"]["WindowPosY"].getOrDefault<int32>(200);
+        m_Store.window = Syrius::createWindow(windowDesc);
 
-        m_Window = Syrius::createWindow(windowDesc);
+        Syrius::ContextDesc cDesc;
+        cDesc.api = static_cast<SR_SUPPORTED_API>(m_Store.config["UI"]["GraphicsAPI"].getOrDefault<uint32>(SR_API_OPENGL));
+        m_Store.srContext =m_Store.window->createContext(cDesc);
+        m_Store.srContext->setVerticalSynchronisation(m_Store.config["UI"]["VSync"].getOrDefault<bool>(true));
 
-        Syrius::ContextDesc contextDesc;
-        contextDesc.api = SR_API_OPENGL;
-        m_OpenGLContext = m_Window->createContext(contextDesc);
-        m_OpenGLContext->setVerticalSynchronisation(true);
-        m_Window->createImGuiContext();
+        m_Store.window->createImGuiContext();
 
-        setupSrslAPI();
-        setupOpenGL();
+        m_Store.srContext->setClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+
+        setupPanels();
+    }
+
+    Simulator::~Simulator() {
+        m_Store.window->destroyImGuiContext();
+        m_Store.window->destroyContext();
+
+        m_Store.config["UI"]["WindowWidth"] = m_Store.window->getWidth();
+        m_Store.config["UI"]["WindowHeight"] = m_Store.window->getHeight();
+        m_Store.config["UI"]["WindowPosX"] = m_Store.window->getPosX();
+        m_Store.config["UI"]["WindowPosY"] = m_Store.window->getPosY();
+
+        m_Store.config.save();
     }
 
     void Simulator::run() {
-        while(m_Window->isOpen()){
-            m_Window->pollEvents();
-            while(m_Window->hasEvent()){
-                auto event = m_Window->getEvent();
-                if(event.type == SR_EVENT_WINDOW_CLOSED){
-                    m_Window->close();
+        while (m_Store.window->isOpen()){
+            m_Store.window->pollEvents();
+            while (m_Store.window->hasEvent()){
+                auto event = m_Store.window->getEvent();
+                if (event.type == SR_EVENT_WINDOW_CLOSED){
+                    m_Store.window->close();
                 }
             }
-            m_OpenGLContext->clear();
 
-            renderImGui();
+            m_Store.srContext->clear();
 
-            m_OpenGLContext->swapBuffers();
+            drawImGui();
+
+            m_Store.srContext->swapBuffers();
         }
-
     }
 
-    void Simulator::setupSrslAPI() {
-        SIM_START_TIME("SrslAPI::Setup");
-        m_SrslContext = createContext();
+    void Simulator::drawImGui() {
+        m_Store.window->onImGuiBegin();
 
-        m_VertexLayout = m_SrslContext->createVertexLayout();
-        m_VertexLayout->pushAttribute("Position", SRSL_FLOAT32_3);
-        m_VertexLayout->pushAttribute("Color", SRSL_FLOAT32_3);
-        m_VertexLayout->pushAttribute("Normal", SRSL_FLOAT32_3);
-        m_VertexLayout->pushAttribute("TexCoords", SRSL_FLOAT32_4);
+        m_Store.navBar->draw();
 
-        std::vector<Vertex> rectangle = {
-                {-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -1.f, 0.f, 0.f, 0.f, 0.f, 0.0f, 0.0f},
-                {0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, -1.f, 0.f, 0.f, 2.f, 0.f, 0.0f, 0.0f},
-                {0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, -1.f, 0.f, 0.f, 2.f, 2.f, 0.0f, 0.0f},
-                {-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, -1.f, 0.f, 0.f, 0.f, 2.f, 0.0f, 0.0f}
-        };
-        m_VertexBuffer = m_SrslContext->createVertexBuffer(m_VertexLayout, rectangle.data(), rectangle.size() * sizeof(Vertex));
-
-        std::vector<uint32_t> indices = {
-                0, 1, 2,
-                2, 3, 0
-        };
-        m_IndexBuffer = m_SrslContext->createIndexBuffer(indices.data(), indices.size());
-
-        SIM_START_TIME("SrslAPI::ShaderCompilation")
-        m_Shader = m_SrslContext->createShader("./SRSLShaders/Basic-vs.srsl", "./SRSLShaders/Basic-fs.srsl");
-        auto end_time = std::chrono::high_resolution_clock::now();
-        SIM_STOP_TIME("SrslAPI::ShaderCompilation")
-
-        ColorAttachmentDesc desc;
-        desc.width = SIM_WIDTH;
-        desc.height = SIM_HEIGHT;
-        desc.channelCount = 4;
-        desc.clearColor[0] = 0.2f;
-        desc.clearColor[1] = 0.3f;
-        desc.clearColor[2] = 0.8f;
-        desc.clearColor[3] = 1.0f;
-
-        FrameBufferLayout fbLayout;
-        fbLayout.setViewport(1280, 720, 0, 0);
-        fbLayout.addColorAttachment(desc);
-
-        m_FrameBuffer = m_SrslContext->createFrameBuffer(fbLayout);
-        m_FrameBuffer->getColorAttachment(0)->clear();
-
-        glm::mat4 modelData(1.0f);
-        ConstantBufferDesc cbd;
-        cbd.name = "ModelData";
-        cbd.size = sizeof(glm::mat4);
-        cbd.data = &modelData;
-        m_ConstantBuffer = m_SrslContext->createConstantBuffer(cbd);
-
-        ImageDesc imgDesc;
-        imgDesc.flipOnLoad = true;
-        imgDesc.path = "./Resources/Textures/awesomeface.png";
-        m_Texture = m_SrslContext->createTexture2D(imgDesc);
-        SIM_STOP_TIME("SrslAPI::Setup");
+        m_Store.window->onImGuiEnd();
     }
 
-    void Simulator::setupOpenGL() {
-        SIM_START_TIME("Syrius::OpenGLSetup");
-        Syrius::Texture2DDesc desc;
-        desc.width = SIM_WIDTH;
-        desc.height = SIM_HEIGHT;
-        desc.format = SR_TEXTURE_RGBA_UI8;
-        desc.data = m_FrameBuffer->getColorAttachment(0)->getData().data();
-        m_RenderTexture = m_OpenGLContext->createTexture2D(desc);
-        SIM_STOP_TIME("Syrius::OpenGLSetup");
+    void Simulator::setupPanels() {
+        m_Store.navBar = createUP<NavBar>(m_Store);
 
-    }
-
-    void Simulator::renderSrsl() {
-        SIM_START_TIME("SrslAPI::Render");
-        m_FrameBuffer->getColorAttachment(0)->clear();
-
-        m_FrameBuffer->bind();
-        m_VertexBuffer->bind();
-        m_IndexBuffer->bind();
-        m_ConstantBuffer->bind();
-        m_Shader->bind();
-        m_Texture->bind(0);
-
-        m_SrslContext->draw();
-
-        SIM_STOP_TIME("SrslAPI::Render");
-    }
-
-    void Simulator::renderImGui() {
-        m_Window->onImGuiBegin();
-
-        ImGui::SetNextWindowPos(ImVec2(0, 0));
-        ImGui::SetNextWindowSize(ImVec2(SIM_WIDTH / 5, SIM_HEIGHT));
-        ImGui::Begin("Utils", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
-
-        if (ImGui::Button("Render SRSL")) {
-            renderSrsl();
-            m_RenderTexture->setData(m_FrameBuffer->getColorAttachment(0)->getData().data(), 0, 0, SIM_WIDTH, SIM_HEIGHT);
-        }
-        // render timers in a table
-        ImGui::Columns(2, "Timers");
-        ImGui::Separator();
-        ImGui::Text("Name"); ImGui::NextColumn();
-        ImGui::Text("Time"); ImGui::NextColumn();
-        ImGui::Separator();
-        for (auto& timer : Timers::getDurations()) {
-            ImGui::Text("%s", timer.first.c_str()); ImGui::NextColumn();
-            ImGui::Text("%llu ms", timer.second); ImGui::NextColumn();
-        }
-        ImGui::Separator();
-        ImGui::Columns(1);
-
-        float translation[3] = {m_Translation.x, m_Translation.y, m_Translation.z};
-        if (ImGui::DragFloat3("Translation", translation, 0.1f)) {
-            m_Translation = glm::vec3(translation[0], translation[1], translation[2]);
-            glm::mat4 modelData(1.0f);
-            modelData = glm::translate(modelData, m_Translation);
-            m_ConstantBuffer->setData(&modelData, sizeof(glm::mat4));
-        }
-
-        ImGui::End();
-
-        ImGui::SetNextWindowPos(ImVec2(SIM_WIDTH / 5, 0));
-        ImGui::SetNextWindowSize(ImVec2( 4 * SIM_WIDTH / 5 , SIM_HEIGHT));
-        ImGui::Begin("Render", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
-        ImGui::Image((void*)m_RenderTexture->getIdentifier(), ImVec2(2 * SIM_WIDTH / 3, 2 * SIM_HEIGHT / 3), ImVec2(0, 1), ImVec2(1, 0));
-        ImGui::End();
-
-        m_Window->onImGuiEnd();
     }
 
 }

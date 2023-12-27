@@ -10,10 +10,12 @@ struct Vertex{
 
 int main(int argc, char** argv) {
     try {
-        Simulator::Simulator simulator;
+        if (argc < 2) {
+            std::cerr << "Usage: " << argv[0] << " <path/to/config.ini>" << std::endl;
+            return 1;
+        }
+        Simulator::Simulator simulator(argv[1]);
         simulator.run();
-
-
 
     } catch (std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
