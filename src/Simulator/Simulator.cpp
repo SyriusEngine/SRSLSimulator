@@ -58,13 +58,17 @@ namespace Simulator{
     void Simulator::drawImGui() {
         m_Store.window->onImGuiBegin();
 
+        ImGui::ShowDemoWindow();
+
         m_Store.navBar->draw();
+        m_Store.pipelinePanel->draw();
 
         m_Store.window->onImGuiEnd();
     }
 
     void Simulator::setupPanels() {
         m_Store.navBar = createUP<NavBar>(m_Store);
+        m_Store.pipelinePanel = createUP<PipelinePanel>(m_Store);
 
     }
 

@@ -2,16 +2,18 @@
 
 namespace Simulator{
 
-    NavBar::NavBar(SimulatorStore &store) : Panel(store, store.window->getWidth(), 20, 0, 0) {
+    NavBar::NavBar(SimulatorStore &store) :
+    Panel(store, "NavBar", store.window->getWidth(), 20, 0, 0) {
 
     }
 
     void NavBar::draw() {
         ImGui::SetNextWindowPos(ImVec2(panelX, panelY));
         ImGui::SetNextWindowSize(ImVec2(panelWidth, panelHeight));
-        ImGui::Begin("Panel", nullptr, ImGuiWindowFlags_NoMove |
+        ImGui::Begin(name.c_str(), nullptr, ImGuiWindowFlags_NoMove |
                                        ImGuiWindowFlags_NoCollapse |
                                        ImGuiWindowFlags_NoTitleBar |
+                                       ImGuiWindowFlags_NoBackground |
                                        ImGuiWindowFlags_NoResize |
                                        ImGuiWindowFlags_MenuBar |
                                        ImGuiWindowFlags_NoNavFocus);

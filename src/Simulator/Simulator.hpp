@@ -4,6 +4,7 @@
 #include "SimulatorStore.hpp"
 #include "GraphicsAPI/Profiler.hpp"
 #include "Panels/NavBar.hpp"
+#include "Panels/PipelinePanel.hpp"
 
 namespace Simulator{
 

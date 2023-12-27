@@ -2,21 +2,23 @@
 
 namespace Simulator{
 
-    Panel::Panel(SimulatorStore& store, uint32 width, uint32 height, uint32 x, uint32 y):
+    Panel::Panel(SimulatorStore& store, const std::string& name, uint32 width, uint32 height, uint32 x, uint32 y):
     m_Store(store),
     panelWidth(width),
     panelHeight(height),
     panelX(x),
-    panelY(y){
+    panelY(y),
+    name(name){
 
     }
 
     void Panel::onBeginDraw() {
         ImGui::SetNextWindowPos(ImVec2(panelX, panelY));
         ImGui::SetNextWindowSize(ImVec2(panelWidth, panelHeight));
-        ImGui::Begin("Panel", nullptr, ImGuiWindowFlags_NoMove |
+        ImGui::Begin(name.c_str(), nullptr, ImGuiWindowFlags_NoMove |
                                        ImGuiWindowFlags_NoCollapse |
-                                       ImGuiWindowFlags_NoTitleBar |
+                                       ImGuiWindowFlags_NoBringToFrontOnFocus |
+                                       ImGuiWindowFlags_NoResize |
                                        ImGuiWindowFlags_NoNavFocus);
 
     }

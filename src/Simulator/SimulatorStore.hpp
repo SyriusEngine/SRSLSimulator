@@ -19,6 +19,7 @@ namespace Simulator{
         Syrius::ResourceView<Syrius::Context> srContext;
 
         UP<Panel> navBar;
+        UP<Panel> pipelinePanel;
 
     };
 
