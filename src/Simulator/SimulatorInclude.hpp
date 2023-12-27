@@ -13,6 +13,9 @@
 #define SIM_WIDTH 1920
 #define SIM_HEIGHT 1080
 
+#define DRAW_WIDTH 800
+#define DRAW_HEIGHT 800
+
 namespace Simulator{
 
     struct Vertex{

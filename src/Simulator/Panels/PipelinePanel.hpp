@@ -11,6 +11,11 @@ namespace Simulator{
         ~PipelinePanel() override = default;
 
         void draw() override;
+
+    private:
+        void drawVertexLayout();
+
+        static SRSL_SCALAR_TYPE cCountToType(uint32 count);
     };
 
 }

@@ -21,6 +21,7 @@ namespace Simulator{
         m_Store.window->createImGuiContext();
 
         m_Store.srContext->setClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+        m_Store.renderer = createUP<Renderer>(m_Store);
 
         setupPanels();
     }
@@ -57,8 +58,6 @@ namespace Simulator{
 
     void Simulator::drawImGui() {
         m_Store.window->onImGuiBegin();
-
-        ImGui::ShowDemoWindow();
 
         m_Store.navBar->draw();
         m_Store.pipelinePanel->draw();

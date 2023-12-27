@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../SimulatorStore.hpp"
+#include "../Renderer.hpp"
 
 namespace Simulator{
 

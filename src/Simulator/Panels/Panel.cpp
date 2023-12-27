@@ -18,7 +18,6 @@ namespace Simulator{
         ImGui::Begin(name.c_str(), nullptr, ImGuiWindowFlags_NoMove |
                                        ImGuiWindowFlags_NoCollapse |
                                        ImGuiWindowFlags_NoBringToFrontOnFocus |
-                                       ImGuiWindowFlags_NoResize |
                                        ImGuiWindowFlags_NoNavFocus);
 
     }

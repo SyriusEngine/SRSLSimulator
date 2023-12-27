@@ -25,6 +25,12 @@ namespace Simulator{
                 }
                 ImGui::EndMenu();
             }
+            if (ImGui::BeginMenu("Render")) {
+                if (ImGui::MenuItem("Render")) {
+
+                }
+                ImGui::EndMenu();
+            }
             ImGui::EndMenuBar();
         }
 

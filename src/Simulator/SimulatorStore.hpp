@@ -5,6 +5,7 @@
 namespace Simulator{
 
     class Panel;
+    class Renderer;
 
     class SimulatorStore{
     public:
@@ -17,6 +18,8 @@ namespace Simulator{
 
         Syrius::Resource<Syrius::Window> window;
         Syrius::ResourceView<Syrius::Context> srContext;
+
+        UP<Renderer> renderer;
 
         UP<Panel> navBar;
         UP<Panel> pipelinePanel;

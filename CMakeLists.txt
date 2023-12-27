@@ -71,7 +71,7 @@ set(SIMULATOR_SRC
     src/Simulator/Panels/Panel.cpp
     src/Simulator/Panels/NavBar.cpp
     src/Simulator/Panels/PipelinePanel.cpp
-    )
+    src/Simulator/Renderer.cpp src/Simulator/Renderer.hpp)
 
 add_executable(SrslSimulator main.cpp ${SIMULATOR_SRC})
 target_link_libraries(SrslSimulator -lSrslAPI -lSyriusCore)

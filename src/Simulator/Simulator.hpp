@@ -3,6 +3,9 @@
 #include "SimulatorInclude.hpp"
 #include "SimulatorStore.hpp"
 #include "GraphicsAPI/Profiler.hpp"
+
+#include "Renderer.hpp"
+
 #include "Panels/NavBar.hpp"
 #include "Panels/PipelinePanel.hpp"
 
