@@ -1,6 +1,5 @@
 #include "SimulatorStore.hpp"
-#include "Panels/NavBar.hpp"
-#include "Panels/PipelinePanel.hpp"
+#include "Panels/Panel.hpp"
 #include "Renderer.hpp"
 
 namespace Simulator{
@@ -9,7 +8,8 @@ namespace Simulator{
     config(configFile),
     navBar(nullptr),
     pipelinePanel(nullptr),
-    renderer(nullptr){
+    renderer(nullptr),
+    renderTargetPanel(nullptr){
 
     }
 

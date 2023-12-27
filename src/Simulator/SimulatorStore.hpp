@@ -23,6 +23,7 @@ namespace Simulator{
 
         UP<Panel> navBar;
         UP<Panel> pipelinePanel;
+        UP<Panel> renderTargetPanel;
 
     };
 

@@ -61,6 +61,7 @@ namespace Simulator{
 
         m_Store.navBar->draw();
         m_Store.pipelinePanel->draw();
+        m_Store.renderTargetPanel->draw();
 
         m_Store.window->onImGuiEnd();
     }
@@ -68,6 +69,7 @@ namespace Simulator{
     void Simulator::setupPanels() {
         m_Store.navBar = createUP<NavBar>(m_Store);
         m_Store.pipelinePanel = createUP<PipelinePanel>(m_Store);
+        m_Store.renderTargetPanel = createUP<RenderTargetPanel>(m_Store);
 
     }
 

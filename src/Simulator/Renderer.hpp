@@ -19,6 +19,7 @@ namespace Simulator{
 
     public:
         UP<VertexLayout> vertexLayout;
+        UP<FrameBuffer> frameBuffer;
 
     private:
         SimulatorStore& m_Store;
@@ -27,7 +28,6 @@ namespace Simulator{
         uint32 m_Height;
 
         UP<Context> m_Context;
-        UP<FrameBuffer> m_FrameBuffer;
 
 
     };

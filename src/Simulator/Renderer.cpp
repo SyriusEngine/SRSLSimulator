@@ -22,14 +22,14 @@ namespace Simulator{
         fbLayout.setViewport(m_Width, m_Height, 0, 0);
         fbLayout.addColorAttachment(caDesc);
 
-        m_FrameBuffer = m_Context->createFrameBuffer(fbLayout);
-        m_FrameBuffer->getColorAttachment(0)->clear();
+        frameBuffer = m_Context->createFrameBuffer(fbLayout);
+        frameBuffer->getColorAttachment(0)->clear();
 
         vertexLayout = m_Context->createVertexLayout();
     }
 
     void Renderer::draw() {
-        m_FrameBuffer->getColorAttachment(0)->clear();
+        frameBuffer->getColorAttachment(0)->clear();
     }
 
     void Renderer::savePipelineConfig(const std::string &path) {
@@ -64,4 +64,5 @@ namespace Simulator{
         }
 
     }
+
 }
