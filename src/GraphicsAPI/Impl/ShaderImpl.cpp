@@ -55,6 +55,7 @@ namespace SrslAPI{
         std::filesystem::path includePath = std::filesystem::current_path();
         includePath /= "Dependencies";
         includePath /= "glm";
+        includePath /= "glm";
         if (!std::filesystem::exists(includePath)) {
             throw std::runtime_error("Dependencies folder not found. Please make sure that there exists a folder structure like this: \n"
                                      "Dependencies\n"
@@ -68,7 +69,7 @@ namespace SrslAPI{
         m_ExecutablePath += "/__shader__" + std::to_string(reinterpret_cast<uint64_t>(this)) + ".dll";
 
         std::string cmd = "g++ -g -shared -std=c++17 "; // shared flag for dll, -g for debug symbols
-        cmd += "-I./Dependencies ";
+        cmd += "-I./Dependencies/glm ";
         cmd += "-o " + m_ExecutablePath + " ";
         cmd += m_OutputPath.string() + "/" + COMPILED_VS_NAME + " ";
         cmd += m_OutputPath.string() + "/" + COMPILED_FS_NAME + " ";

@@ -18,5 +18,7 @@ void main() {
     if (texel.a < 0.1f){
         discard;
     }
+
+
     fsOut.color = mix(texel, fsIn.color, 0.5f);
 }

@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(./Dependencies/SyriusCore)
 add_subdirectory(./Dependencies/SyriusShadingLanguage)
 
+include_directories(./Dependencies/)
+
 set(SRSL_DEPENDECIES_DLL
     ${CMAKE_CURRENT_BINARY_DIR}/Dependencies/SyriusCore/libSyriusCore.dll
     ${CMAKE_CURRENT_BINARY_DIR}/Dependencies/SyriusShadingLanguage/libSrslCompiler.dll
@@ -19,8 +21,6 @@ add_custom_target(CopyDLL ALL
 
 
 add_compile_definitions(SRSL_GRAPHICS_API_EXPORT_DLL)
-
-include_directories(./Dependencies/)
 
 link_directories(./cmake-build-debug/)
 
@@ -60,9 +60,10 @@ add_dependencies(SrslAPI CopyDLL)
 
 include_directories(./include/)
 include_directories(./Dependencies/SyriusCore/include/)
-
-file(GLOB SYRIUSCORE_DLL "./Dependencies/SyriusCore/bin/*.dll")
-file(COPY ${SYRIUSCORE_DLL} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/SyriusShadingLanguage)
+include_directories(./Dependencies/glm/)
+include_directories(./Dependencies/glm/glm/)
+include_directories(./Dependencies/EasyIni/include/)
+include_directories(./Dependencies/json/include/)
 
 set(SIMULATOR_SRC
     src/Simulator/Simulator.cpp

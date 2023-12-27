@@ -5,3 +5,9 @@
 [submodule "Dependencies/SyriusCore"]
 	path = Dependencies/SyriusCore
 	url = https://github.com/SyriusEngine/SyriusCore
+[submodule "Dependencies/json"]
+	path = Dependencies/json
+	url = https://github.com/nlohmann/json
+[submodule "Dependencies/EasyIni"]
+	path = Dependencies/EasyIni
+	url = https://github.com/artick788/EasyIni
