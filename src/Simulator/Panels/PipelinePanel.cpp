@@ -45,8 +45,10 @@ namespace Simulator{
         ImGui::Columns(1);
 
         static bool showAddNewAttributeWindow = false;
-        if (ImGui::Button("Add New Attribute")){
-            showAddNewAttributeWindow = true;
+        if (!showAddNewAttributeWindow){
+            if (ImGui::Button("Add New Attribute")){
+                showAddNewAttributeWindow = true;
+            }
         }
         if (showAddNewAttributeWindow){
             static char newAttributeName[64] = "";
@@ -67,13 +69,4 @@ namespace Simulator{
         }
     }
 
-    SRSL_SCALAR_TYPE PipelinePanel::cCountToType(uint32 count) {
-        switch (count) {
-            case 1: return SRSL_FLOAT32_1;
-            case 2: return SRSL_FLOAT32_2;
-            case 3: return SRSL_FLOAT32_3;
-            case 4: return SRSL_FLOAT32_4;
-            default: return SRSL_FLOAT32_4;
-        }
-    }
 }

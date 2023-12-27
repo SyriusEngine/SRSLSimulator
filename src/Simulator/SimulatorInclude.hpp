@@ -27,4 +27,14 @@ namespace Simulator{
 
     using namespace SrslAPI;
 
+    inline SRSL_SCALAR_TYPE cCountToType(uint32 count){
+        switch (count) {
+            case 1: return SRSL_FLOAT32_1;
+            case 2: return SRSL_FLOAT32_2;
+            case 3: return SRSL_FLOAT32_3;
+            case 4: return SRSL_FLOAT32_4;
+            default: return SRSL_FLOAT32_4;
+        }
+    }
+
 }

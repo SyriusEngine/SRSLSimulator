@@ -13,6 +13,10 @@ namespace Simulator{
 
         void draw();
 
+        void savePipelineConfig(const std::string& path);
+
+        void loadPipelineConfig(const std::string& path);
+
     public:
         UP<VertexLayout> vertexLayout;
 

@@ -31,4 +31,37 @@ namespace Simulator{
     void Renderer::draw() {
         m_FrameBuffer->getColorAttachment(0)->clear();
     }
+
+    void Renderer::savePipelineConfig(const std::string &path) {
+        nlohmann::json config;
+        // vertex Layout
+        const auto& attributes = vertexLayout->getAttributes();
+        for(const auto& attribute: attributes){
+            config["Pipeline"]["VertexLayout"]["Attributes"].push_back({
+                {"Name", attribute.name},
+                {"Count", attribute.componentCount},
+            });
+        }
+        config["Pipeline"]["VertexLayout"]["Stride"] = vertexLayout->getStride();
+
+        // save to file
+        std::ofstream file(path);
+        file << config.dump(4);
+        file.close();
+    }
+
+    void Renderer::loadPipelineConfig(const std::string &path) {
+        std::ifstream file(path);
+        nlohmann::json config;
+        file >> config;
+        file.close();
+
+        // vertex Layout
+        vertexLayout = m_Context->createVertexLayout();
+        const auto& attributes = config["Pipeline"]["VertexLayout"]["Attributes"];
+        for(const auto& attribute: attributes){
+            vertexLayout->pushAttribute(attribute["Name"].get<std::string>(), cCountToType(attribute["Count"].get<uint32>()));
+        }
+
+    }
 }
