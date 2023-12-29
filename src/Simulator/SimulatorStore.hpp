@@ -24,6 +24,11 @@ namespace Simulator{
         UP<Panel> navBar;
         UP<Panel> pipelinePanel;
         UP<Panel> renderTargetPanel;
+        UP<Panel> vertexShaderPanel;
+        UP<Panel> fragmentShaderPanel;
+
+        std::string vertexShaderPath;
+        std::string fragmentShaderPath;
 
     };
 

@@ -9,6 +9,7 @@
 #include "Panels/NavBar.hpp"
 #include "Panels/PipelinePanel.hpp"
 #include "Panels/RenderTargetPanel.hpp"
+#include "Panels/ShaderPanel.hpp"
 
 namespace Simulator{
 

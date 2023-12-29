@@ -62,6 +62,10 @@ namespace Simulator{
         m_Store.navBar->draw();
         m_Store.pipelinePanel->draw();
         m_Store.renderTargetPanel->draw();
+        m_Store.vertexShaderPanel->panelX = m_Store.renderTargetPanel->panelX + m_Store.renderTargetPanel->panelWidth;
+        m_Store.vertexShaderPanel->draw();
+        m_Store.fragmentShaderPanel->panelX = m_Store.vertexShaderPanel->panelX + m_Store.vertexShaderPanel->panelWidth;
+        m_Store.fragmentShaderPanel->draw();
 
         m_Store.window->onImGuiEnd();
     }
@@ -70,6 +74,10 @@ namespace Simulator{
         m_Store.navBar = createUP<NavBar>(m_Store);
         m_Store.pipelinePanel = createUP<PipelinePanel>(m_Store);
         m_Store.renderTargetPanel = createUP<RenderTargetPanel>(m_Store);
+        auto xPos = m_Store.renderTargetPanel->panelX + m_Store.renderTargetPanel->panelWidth;
+        m_Store.vertexShaderPanel = createUP<ShaderPanel>(m_Store, "Vertex Shader", xPos);
+        xPos += m_Store.vertexShaderPanel->panelWidth;
+        m_Store.fragmentShaderPanel = createUP<ShaderPanel>(m_Store, "Fragment Shader", xPos);
 
     }
 

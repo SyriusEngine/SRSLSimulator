@@ -14,6 +14,10 @@ namespace Simulator{
 
     private:
         void drawVertexLayout();
+
+        void drawMesh();
+
+        void drawShaders();
     };
 
 }

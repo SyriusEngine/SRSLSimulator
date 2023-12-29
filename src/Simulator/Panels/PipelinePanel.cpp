@@ -14,10 +14,10 @@ namespace Simulator{
             drawVertexLayout();
         }
         if (ImGui::CollapsingHeader("Mesh")){
-
+            drawMesh();
         }
         if (ImGui::CollapsingHeader("Shader")){
-
+            drawShaders();
         }
         if (ImGui::CollapsingHeader("Textures")){
 
@@ -66,6 +66,28 @@ namespace Simulator{
                 newAttributeName[0] = '\0';
             }
             ImGui::EndChild();
+        }
+    }
+
+    void PipelinePanel::drawMesh() {
+
+    }
+
+    void PipelinePanel::drawShaders() {
+        if (ImGui::Button("Select Vertex Shader")){
+            m_Store.vertexShaderPath = m_Store.window->openFileDialog("");
+        }
+        ImGui::SameLine();
+        ImGui::Text(m_Store.vertexShaderPath.c_str());
+
+        if (ImGui::Button("Select Fragment Shader")){
+            m_Store.fragmentShaderPath = m_Store.window->openFileDialog("");
+        }
+        ImGui::SameLine();
+        ImGui::Text(m_Store.fragmentShaderPath.c_str());
+
+        if (ImGui::Button("Load")){
+            m_Store.renderer->loadShaders(m_Store.vertexShaderPath, m_Store.fragmentShaderPath);
         }
     }
 

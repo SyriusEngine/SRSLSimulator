@@ -19,7 +19,8 @@ namespace Simulator{
         onBeginDraw();
         if (ImGui::Button("Render")){
             m_Store.renderer->draw();
-            m_RenderTargetView->setData(m_Store.renderer->frameBuffer->getColorAttachment(0)->getData().data(), 0, 0, DRAW_WIDTH, DRAW_HEIGHT);
+            const auto& data = m_Store.renderer->frameBuffer->getColorAttachment(0)->getData();
+            m_RenderTargetView->setData(data.data(), 0, 0, DRAW_WIDTH, DRAW_HEIGHT);
         }
 
         ImGui::Image((void*)m_RenderTargetView->getIdentifier(), ImVec2(DRAW_WIDTH, DRAW_HEIGHT), ImVec2(0, 1), ImVec2(1, 0));

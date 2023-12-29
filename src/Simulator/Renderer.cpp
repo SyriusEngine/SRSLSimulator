@@ -1,4 +1,5 @@
 #include "Renderer.hpp"
+#include "Panels/ShaderPanel.hpp"
 
 namespace Simulator{
 
@@ -44,6 +45,10 @@ namespace Simulator{
         }
         config["Pipeline"]["VertexLayout"]["Stride"] = vertexLayout->getStride();
 
+        // shaders
+        config["Pipeline"]["Shaders"]["VertexShaderPath"] = m_Store.vertexShaderPath;
+        config["Pipeline"]["Shaders"]["FragmentShaderPath"] = m_Store.fragmentShaderPath;
+
         // save to file
         std::ofstream file(path);
         file << config.dump(4);
@@ -63,6 +68,24 @@ namespace Simulator{
             vertexLayout->pushAttribute(attribute["Name"].get<std::string>(), cCountToType(attribute["Count"].get<uint32>()));
         }
 
+        // shaders
+        m_Store.vertexShaderPath = config["Pipeline"]["Shaders"]["VertexShaderPath"].get<std::string>();
+        m_Store.fragmentShaderPath = config["Pipeline"]["Shaders"]["FragmentShaderPath"].get<std::string>();
+        loadShaders(m_Store.vertexShaderPath, m_Store.fragmentShaderPath);
+
+    }
+
+    void Renderer::loadShaders(const std::string &vertexShaderPath, const std::string &fragmentShaderPath) {
+        if (vertexShaderPath.empty() || fragmentShaderPath.empty()){
+            return;
+        }
+        shader = m_Context->createShader(vertexShaderPath, fragmentShaderPath);
+
+        auto pVertexShaderPanel = dynamic_cast<ShaderPanel*>(m_Store.vertexShaderPanel.get());
+        auto pFragmentShaderPanel = dynamic_cast<ShaderPanel*>(m_Store.fragmentShaderPanel.get());
+
+        pVertexShaderPanel->loadShader(vertexShaderPath);
+        pFragmentShaderPanel->loadShader(fragmentShaderPath);
     }
 
 }

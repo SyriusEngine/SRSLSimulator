@@ -14,7 +14,7 @@
 #define SIM_HEIGHT 1080
 
 #define DRAW_WIDTH 800
-#define DRAW_HEIGHT 800
+#define DRAW_HEIGHT 600
 
 namespace Simulator{
 

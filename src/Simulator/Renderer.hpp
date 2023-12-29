@@ -17,9 +17,12 @@ namespace Simulator{
 
         void loadPipelineConfig(const std::string& path);
 
+        void loadShaders(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
+
     public:
         UP<VertexLayout> vertexLayout;
         UP<FrameBuffer> frameBuffer;
+        UP<Shader> shader;
 
     private:
         SimulatorStore& m_Store;
