@@ -39,4 +39,11 @@ namespace SrslAPI{
         stbi_flip_vertically_on_write(true);
         stbi_write_png(path.c_str(), m_Width, m_Height, m_ChannelCount, m_Data.data(), m_Width * m_ChannelCount);
     }
+
+    void ColorAttachment::setClearColor(float r, float g, float b, float a) {
+        m_ClearColor[0] = r;
+        m_ClearColor[1] = g;
+        m_ClearColor[2] = b;
+        m_ClearColor[3] = a;
+    }
 }

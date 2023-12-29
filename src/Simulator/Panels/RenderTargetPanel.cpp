@@ -15,6 +15,7 @@ namespace Simulator{
     }
 
     void RenderTargetPanel::draw() {
+        static bool showSaveDialog = false;
         panelX = m_Store.pipelinePanel->panelWidth;
         onBeginDraw();
         if (ImGui::Button("Render")){
@@ -25,6 +26,27 @@ namespace Simulator{
 
         ImGui::Image((void*)m_RenderTargetView->getIdentifier(), ImVec2(DRAW_WIDTH, DRAW_HEIGHT), ImVec2(0, 1), ImVec2(1, 0));
 
+        if (ImGui::Button("Save")){
+            showSaveDialog = true;
+        }
+
         onEndDraw();
+
+        if (showSaveDialog){
+            ImGui::Begin("Save Dialog");
+            static char fileName[64] = "";
+            ImGui::InputText("File Name", fileName, 64);
+            if (ImGui::Button("Save")){
+                std::string filePath = m_Store.window->saveFileDialog(fileName, "");
+                if (!filePath.empty()){
+                    m_Store.renderer->frameBuffer->getColorAttachment(0)->save(filePath + ".png");
+                }
+                showSaveDialog = false;
+            }
+            if (ImGui::Button("Cancel")){
+                showSaveDialog = false;
+            }
+            ImGui::End();
+        }
     }
 }

@@ -31,6 +31,10 @@ namespace SrslAPI{
 
         [[nodiscard]] uint8_t getChannelCount() const { return m_ChannelCount; }
 
+        [[nodiscard]] float* getClearColor() { return m_ClearColor; }
+
+        void setClearColor(float r, float g, float b, float a);
+
     protected:
         uint32_t m_Width;
         uint32_t m_Height;

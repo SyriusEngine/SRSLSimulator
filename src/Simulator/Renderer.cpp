@@ -45,6 +45,13 @@ namespace Simulator{
         }
         config["Pipeline"]["VertexLayout"]["Stride"] = vertexLayout->getStride();
 
+        // background color
+        float* clearColor = frameBuffer->getColorAttachment(0)->getClearColor();
+        config["Pipeline"]["BackgroundColor"]["r"] = clearColor[0];
+        config["Pipeline"]["BackgroundColor"]["g"] = clearColor[1];
+        config["Pipeline"]["BackgroundColor"]["b"] = clearColor[2];
+        config["Pipeline"]["BackgroundColor"]["a"] = clearColor[3];
+
         // shaders
         config["Pipeline"]["Shaders"]["VertexShaderPath"] = m_Store.vertexShaderPath;
         config["Pipeline"]["Shaders"]["FragmentShaderPath"] = m_Store.fragmentShaderPath;
@@ -67,6 +74,13 @@ namespace Simulator{
         for(const auto& attribute: attributes){
             vertexLayout->pushAttribute(attribute["Name"].get<std::string>(), cCountToType(attribute["Count"].get<uint32>()));
         }
+
+        // background color
+        float r = config["Pipeline"]["BackgroundColor"]["r"].get<float>();
+        float g = config["Pipeline"]["BackgroundColor"]["g"].get<float>();
+        float b = config["Pipeline"]["BackgroundColor"]["b"].get<float>();
+        float a = config["Pipeline"]["BackgroundColor"]["a"].get<float>();
+        frameBuffer->getColorAttachment(0)->setClearColor(r, g, b, a);
 
         // shaders
         m_Store.vertexShaderPath = config["Pipeline"]["Shaders"]["VertexShaderPath"].get<std::string>();

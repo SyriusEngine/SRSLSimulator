@@ -25,6 +25,9 @@ namespace Simulator{
         if (ImGui::CollapsingHeader("Constant Buffers")){
 
         }
+        if (ImGui::CollapsingHeader("Background Color")){
+            ImGui::ColorEdit4("Background Color", m_Store.renderer->frameBuffer->getColorAttachment(0)->getClearColor());
+        }
 
         onEndDraw();
     }
