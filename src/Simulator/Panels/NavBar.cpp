@@ -25,6 +25,7 @@ namespace Simulator{
                     std::string filePath = m_Store.window->openFileDialog("");
                     if (!filePath.empty()){
                         m_Store.renderer->loadPipelineConfig(filePath);
+                        m_Store.projectPath = filePath;
                     }
                 }
                 if(ImGui::MenuItem("Save")){

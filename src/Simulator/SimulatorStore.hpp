@@ -6,6 +6,12 @@ namespace Simulator{
 
     typedef std::vector<std::vector<float>> UIVertex;
 
+    struct TextureStorage{
+        std::string path;
+        uint32 slot;
+        bool flipOnLoad;
+    };
+
     class Panel;
     class Renderer;
 
@@ -36,6 +42,8 @@ namespace Simulator{
 
         std::vector<UIVertex> vertices;
         std::vector<uint32> indices;
+
+        std::vector<TextureStorage> textures;
 
     };
 

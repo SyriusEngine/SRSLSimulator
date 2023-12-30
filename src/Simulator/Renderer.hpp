@@ -5,6 +5,11 @@
 
 namespace Simulator{
 
+    struct TextureBindable{
+        uint32 slot;
+        UP<Texture2D> texture;
+    };
+
     class Renderer{
     public:
         explicit Renderer(SimulatorStore& store);
@@ -21,6 +26,8 @@ namespace Simulator{
 
         void loadMesh();
 
+        void loadTexture(const std::string& filePath, uint32 slot = 0, bool flipOnLoad = true);
+
     public:
         UP<VertexLayout> vertexLayout;
         UP<FrameBuffer> frameBuffer;
@@ -36,6 +43,8 @@ namespace Simulator{
         UP<Shader> m_Shader;
         UP<VertexBuffer> m_VertexBuffer;
         UP<IndexBuffer> m_IndexBuffer;
+
+        std::vector<TextureBindable> m_Textures;
     };
 
 }

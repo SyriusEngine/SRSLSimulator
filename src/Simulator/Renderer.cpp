@@ -42,6 +42,9 @@ namespace Simulator{
             m_Shader->bind();
             m_VertexBuffer->bind();
             m_IndexBuffer->bind();
+            for (const auto& texture: m_Textures){
+                texture.texture->bind(texture.slot);
+            }
 
             m_Context->draw();
         }
@@ -86,6 +89,15 @@ namespace Simulator{
         // index buffer
         for (const auto& index: m_Store.indices){
             config["Pipeline"]["IndexBuffer"].push_back(index);
+        }
+
+        // textures
+        for (const auto& texture: m_Store.textures){
+            config["Pipeline"]["Textures"].push_back({
+                {"Slot", texture.slot},
+                {"FilePath", texture.path},
+                {"FlipOnLoad", texture.flipOnLoad},
+            });
         }
 
         // save to file
@@ -141,6 +153,15 @@ namespace Simulator{
         }
         loadMesh();
 
+        // textures
+        const auto& textures = config["Pipeline"]["Textures"];
+        for (const auto& texture: textures){
+            uint32 slot = texture["Slot"].get<uint32>();
+            std::string texPath = texture["FilePath"].get<std::string>();
+            bool flipOnLoad = texture["FlipOnLoad"].get<bool>();
+            loadTexture(texPath, slot, flipOnLoad);
+        }
+
     }
 
     void Renderer::loadShaders(const std::string &vertexShaderPath, const std::string &fragmentShaderPath) {
@@ -167,6 +188,25 @@ namespace Simulator{
         }
         m_VertexBuffer = m_Context->createVertexBuffer(vertexLayout, vertices.data(), vertices.size() * sizeof(UIVertex));
         m_IndexBuffer = m_Context->createIndexBuffer(m_Store.indices.data(), m_Store.indices.size());
+    }
+
+    void Renderer::loadTexture(const std::string &filePath, uint32 slot, bool flipOnLoad) {
+        ImageDesc loader;
+        loader.path = filePath;
+        loader.flipOnLoad = flipOnLoad;
+
+        TextureBindable bindable;
+        bindable.slot = slot;
+        bindable.texture = m_Context->createTexture2D(loader);
+
+        m_Textures.push_back(std::move(bindable));
+
+        TextureStorage storage;
+        storage.flipOnLoad = flipOnLoad;
+        storage.path = filePath;
+        storage.slot = slot;
+
+        m_Store.textures.push_back(std::move(storage));
     }
 
 }

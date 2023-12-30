@@ -18,6 +18,8 @@ namespace Simulator{
         void drawMesh();
 
         void drawShaders();
+
+        void drawTextures();
     };
 
 }

@@ -1,0 +1,22 @@
+ShaderType = Fragment;
+
+Input fsIn{
+    float4 position: SRV_POSITION;
+    float4 color: Color;
+    float4 texCoords: TexCoord;
+};
+
+Output fsOut{
+    float4 color: SRV_TARGET_0;
+};
+
+Texture2D(slot = 0) albedo;
+Sampler(slot = 0) sampler0;
+
+void main() {
+    float4 texel = sampleTexture(albedo, sampler0, fsIn.texCoords);
+    if (texel.a < 0.1f){
+        discard;
+    }
+    fsOut.color = mix(texel, fsIn.color, 0.5f);
+}

@@ -20,7 +20,7 @@ namespace Simulator{
             drawShaders();
         }
         if (ImGui::CollapsingHeader("Textures")){
-
+            drawTextures();
         }
         if (ImGui::CollapsingHeader("Constant Buffers")){
 
@@ -144,6 +144,35 @@ namespace Simulator{
             m_Store.renderer->loadShaders(m_Store.vertexShaderPath, m_Store.fragmentShaderPath);
             printf("Loaded Shaders\n");
         }
+    }
+
+    void PipelinePanel::drawTextures() {
+        if (!m_Store.textures.empty()){
+            ImGui::Columns(2, "Textures");
+            ImGui::Separator();
+            ImGui::Text("Slot"); ImGui::NextColumn();
+            ImGui::Text("Path"); ImGui::NextColumn();
+            ImGui::Separator();
+            for (const auto& tex : m_Store.textures){
+                ImGui::Text("%d", tex.slot); ImGui::NextColumn();
+                ImGui::Text(tex.path.c_str()); ImGui::NextColumn();
+            }
+            ImGui::Separator();
+            ImGui::Columns(1);
+        }
+
+        ImGui::Text("Add Texture");
+        static int slot = 0;
+        ImGui::InputInt("Slot", &slot);
+        static bool flipOnLoad = true;
+        ImGui::Checkbox("Flip On Load", &flipOnLoad);
+        if (ImGui::Button("Add Texture")){
+            auto filePath = m_Store.window->openFileDialog("");
+            if (!filePath.empty()){
+                m_Store.renderer->loadTexture(filePath, slot, flipOnLoad);
+            }
+        }
+
     }
 
 }

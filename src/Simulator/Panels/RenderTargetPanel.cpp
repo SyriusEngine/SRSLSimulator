@@ -1,4 +1,5 @@
 #include "RenderTargetPanel.hpp"
+#include <processthreadsapi.h>
 
 namespace Simulator{
 
@@ -29,6 +30,9 @@ namespace Simulator{
         if (ImGui::Button("Save")){
             showSaveDialog = true;
         }
+
+        static uint64 processID = GetCurrentProcessId();
+        ImGui::Text("Process ID: %llu", processID);
 
         onEndDraw();
 
