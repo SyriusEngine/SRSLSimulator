@@ -28,7 +28,11 @@ namespace Simulator{
                     }
                 }
                 if(ImGui::MenuItem("Save")){
-                    showSaveDialog = true;
+                    if (m_Store.projectPath.empty()){
+                        showSaveDialog = true;
+                    }else{
+                        m_Store.renderer->savePipelineConfig(m_Store.projectPath);
+                    }
                 }
                 ImGui::EndMenu();
             }
@@ -44,7 +48,8 @@ namespace Simulator{
             if (ImGui::Button("Save")){
                 std::string filePath = m_Store.window->saveFileDialog(fileName, "");
                 if (!filePath.empty()){
-                    m_Store.renderer->savePipelineConfig(filePath + ".json");
+                    m_Store.projectPath = filePath + ".json";
+                    m_Store.renderer->savePipelineConfig(m_Store.projectPath);
                 }
                 showSaveDialog = false;
             }

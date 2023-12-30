@@ -32,6 +32,8 @@ namespace Simulator{
         std::string vertexShaderPath;
         std::string fragmentShaderPath;
 
+        std::string projectPath;
+
         std::vector<UIVertex> vertices;
         std::vector<uint32> indices;
 
