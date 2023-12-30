@@ -46,6 +46,12 @@ namespace Simulator{
                 if (event.type == SR_EVENT_WINDOW_CLOSED){
                     m_Store.window->close();
                 }
+                if (event.type == SR_EVENT_WINDOW_RESIZED){
+                    m_Store.pipelinePanel->panelHeight = m_Store.window->getHeight() - m_Store.navBar->panelHeight;
+                    m_Store.renderTargetPanel->panelHeight = m_Store.window->getHeight() - m_Store.navBar->panelHeight;
+                    m_Store.vertexShaderPanel->panelHeight = m_Store.window->getHeight() - m_Store.navBar->panelHeight;
+                    m_Store.fragmentShaderPanel->panelHeight = m_Store.window->getHeight() - m_Store.navBar->panelHeight;
+                }
             }
 
             m_Store.srContext->clear();
@@ -59,12 +65,14 @@ namespace Simulator{
     void Simulator::drawImGui() {
         m_Store.window->onImGuiBegin();
 
+        m_Store.navBar->panelWidth = m_Store.window->getWidth();
         m_Store.navBar->draw();
         m_Store.pipelinePanel->draw();
         m_Store.renderTargetPanel->draw();
         m_Store.vertexShaderPanel->panelX = m_Store.renderTargetPanel->panelX + m_Store.renderTargetPanel->panelWidth;
         m_Store.vertexShaderPanel->draw();
         m_Store.fragmentShaderPanel->panelX = m_Store.vertexShaderPanel->panelX + m_Store.vertexShaderPanel->panelWidth;
+        m_Store.fragmentShaderPanel->panelWidth = m_Store.window->getWidth() - m_Store.fragmentShaderPanel->panelX;
         m_Store.fragmentShaderPanel->draw();
 
         m_Store.window->onImGuiEnd();

@@ -5,6 +5,7 @@
 namespace Simulator{
 
     typedef std::vector<std::vector<float>> UIVertex;
+    typedef std::unordered_map<uint32, std::vector<uint32>> ShaderLineInfo;
 
     struct TextureStorage{
         std::string path;
@@ -44,6 +45,11 @@ namespace Simulator{
         std::vector<uint32> indices;
 
         std::vector<TextureStorage> textures;
+
+        ShaderLineInfo vertexShaderLineInfo;
+        ShaderLineInfo fragmentShaderLineInfo;
+        std::string compiledVertexShaderPath;
+        std::string compiledFragmentShaderPath;
 
     };
 

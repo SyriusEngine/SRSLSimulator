@@ -6,7 +6,7 @@ namespace Simulator{
 
     Renderer::Renderer(SimulatorStore &store):
     m_Store(store),
-    m_Shader(nullptr),
+    shader(nullptr),
     m_VertexBuffer(nullptr),
     m_IndexBuffer(nullptr){
         m_Context = createContext();
@@ -36,10 +36,10 @@ namespace Simulator{
     void Renderer::draw() const {
         frameBuffer->getColorAttachment(0)->clear();
 
-        if (m_Shader != nullptr && m_VertexBuffer != nullptr && m_IndexBuffer != nullptr){
+        if (shader != nullptr && m_VertexBuffer != nullptr && m_IndexBuffer != nullptr){
             frameBuffer->bind();
 
-            m_Shader->bind();
+            shader->bind();
             m_VertexBuffer->bind();
             m_IndexBuffer->bind();
             for (const auto& texture: m_Textures){
@@ -174,7 +174,29 @@ namespace Simulator{
         if (vertexShaderPath.empty() || fragmentShaderPath.empty()){
             return;
         }
-        m_Shader = m_Context->createShader(vertexShaderPath, fragmentShaderPath);
+        shader = m_Context->createShader(vertexShaderPath, fragmentShaderPath);
+        auto& debugInfo = shader->getDebugInfo();
+        m_Store.compiledVertexShaderPath = debugInfo.vertexShaderCppSource;
+        m_Store.compiledFragmentShaderPath = debugInfo.fragmentShaderCppSource;
+
+        auto loadLineInfo = [](ShaderLineInfo& lineInfo, const std::string& lineInfoPath){
+            std::ifstream file(lineInfoPath);
+            std::string line;
+            while (std::getline(file, line)){
+                auto splitted = splitString(line, ':');
+                uint32 srslLine = std::stoi(splitted[0]);
+
+                std::stringstream ss(splitted[1]);
+                std::string nr;
+                std::vector<uint32> cppLines;
+                while (std::getline(ss, nr, ' ')){
+                    cppLines.emplace_back(std::stoi(nr));
+                }
+                lineInfo.insert({srslLine, cppLines});
+            }
+        };
+        loadLineInfo(m_Store.vertexShaderLineInfo, debugInfo.vertexShaderLineInfo);
+        loadLineInfo(m_Store.fragmentShaderLineInfo, debugInfo.fragmentShaderLineInfo);
     }
 
     void Renderer::loadMesh() {

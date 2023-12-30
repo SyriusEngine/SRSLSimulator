@@ -11,6 +11,7 @@
 #define COMPILED_SRSL_NAME "comp.cpp"
 #define COMPILED_VS_NAME "comp-vs.cpp"
 #define COMPILED_FS_NAME "comp-fs.cpp"
+#define COMPILED_DIR_NAME "CompiledShaders"
 
 namespace SrslAPI{
 

@@ -34,6 +34,24 @@ namespace Simulator{
         static uint64 processID = GetCurrentProcessId();
         ImGui::Text("Process ID: %llu", processID);
 
+        if (m_Store.renderer->shader != nullptr){
+            const auto& debugInfo = m_Store.renderer->shader->getDebugInfo();
+            ImGui::Text("Vertex Shader Source:");
+            ImGui::Text(debugInfo.vertexShaderSource.c_str());
+            ImGui::Text("Vertex Shader Cpp Source:");
+            ImGui::Text(debugInfo.vertexShaderCppSource.c_str());
+            ImGui::Text("Vertex Shader Line Info:");
+            ImGui::Text(debugInfo.vertexShaderLineInfo.c_str());
+
+            ImGui::Text("Fragment Shader Source:");
+            ImGui::Text(debugInfo.fragmentShaderSource.c_str());
+            ImGui::Text("Fragment Shader Cpp Source:");
+            ImGui::Text(debugInfo.fragmentShaderCppSource.c_str());
+            ImGui::Text("Fragment Shader Line Info:");
+            ImGui::Text(debugInfo.fragmentShaderLineInfo.c_str());
+
+        }
+
         onEndDraw();
 
         if (showSaveDialog){

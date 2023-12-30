@@ -41,7 +41,7 @@ namespace SrslAPI{
 
         // check if output dir exists, if not create it
         m_OutputPath = std::filesystem::current_path();
-        m_OutputPath /= "CompiledShaders";
+        m_OutputPath /= COMPILED_DIR_NAME;
         if(!std::filesystem::exists(m_OutputPath)){
             std::filesystem::create_directory(m_OutputPath);
         }
@@ -49,6 +49,13 @@ namespace SrslAPI{
         cppDescriptor.outputFile = m_OutputPath.string() + "/" + COMPILED_SRSL_NAME;
         cppDescriptor.exportDebugInfo = true;
         m_ShaderProgram->exportCpp(cppDescriptor);
+
+        m_DebugInfo.vertexShaderSource = vertexShader;
+        m_DebugInfo.vertexShaderCppSource = m_OutputPath.string() + "/" + COMPILED_VS_NAME;
+        m_DebugInfo.vertexShaderLineInfo = m_DebugInfo.vertexShaderCppSource + ".lineinfo";
+        m_DebugInfo.fragmentShaderSource = fragmentShader;
+        m_DebugInfo.fragmentShaderCppSource = m_OutputPath.string() + "/" + COMPILED_FS_NAME;
+        m_DebugInfo.fragmentShaderLineInfo = m_DebugInfo.fragmentShaderCppSource + ".lineinfo";
     }
 
     void ShaderImpl::compileCpp() {
