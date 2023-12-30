@@ -15,6 +15,8 @@ namespace Simulator{
         void loadShader(const std::string& shaderPath);
 
     private:
-        std::string m_ShaderSource;
+        std::vector<std::string> m_ShaderSource;
+
+        std::vector<uint32> m_SelectedLines;
     };
 }

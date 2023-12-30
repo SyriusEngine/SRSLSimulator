@@ -4,6 +4,8 @@
 
 namespace Simulator{
 
+    typedef std::vector<std::vector<float>> UIVertex;
+
     class Panel;
     class Renderer;
 
@@ -29,6 +31,9 @@ namespace Simulator{
 
         std::string vertexShaderPath;
         std::string fragmentShaderPath;
+
+        std::vector<UIVertex> vertices;
+        std::vector<uint32> indices;
 
     };
 

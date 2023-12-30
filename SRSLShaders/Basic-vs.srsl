@@ -3,8 +3,7 @@ ShaderType = Vertex;
 Input vsIn{
     float3 position: Position;
     float3 color: Color;
-    float3 normal: Normal;
-    float4 texCoords: TexCoords;
+    float2 texCoords: TexCoords;
 };
 
 Output vsOut{
@@ -13,14 +12,9 @@ Output vsOut{
     float4 texCoords: TexCoords;
 };
 
-ConstantBuffer(slot = 0) ModelData{
-    float4x4 modelMatrix;
-};
-
 void main(){
     float4 extPos = float4(vsIn.position, 1.0);
-    extPos = ModelData.modelMatrix * extPos;
     vsOut.position = extPos;
     vsOut.color = float4(vsIn.color, 1.0);
-    vsOut.texCoords = vsIn.texCoords;
+    vsOut.texCoords = float4(vsIn.texCoords, 0.0f, 1.0f);
 }

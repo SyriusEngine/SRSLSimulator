@@ -1,10 +1,14 @@
 #include "Renderer.hpp"
 #include "Panels/ShaderPanel.hpp"
+#include "Panels/PipelinePanel.hpp"
 
 namespace Simulator{
 
     Renderer::Renderer(SimulatorStore &store):
-    m_Store(store) {
+    m_Store(store),
+    m_Shader(nullptr),
+    m_VertexBuffer(nullptr),
+    m_IndexBuffer(nullptr){
         m_Context = createContext();
 
         m_Width = m_Store.config["Simulation"]["SimulationWidth"].getOrDefault<uint32>(DRAW_WIDTH);
@@ -29,8 +33,18 @@ namespace Simulator{
         vertexLayout = m_Context->createVertexLayout();
     }
 
-    void Renderer::draw() {
+    void Renderer::draw() const {
         frameBuffer->getColorAttachment(0)->clear();
+
+        if (m_Shader != nullptr && m_VertexBuffer != nullptr && m_IndexBuffer != nullptr){
+            frameBuffer->bind();
+
+            m_Shader->bind();
+            m_VertexBuffer->bind();
+            m_IndexBuffer->bind();
+
+            m_Context->draw();
+        }
     }
 
     void Renderer::savePipelineConfig(const std::string &path) {
@@ -55,6 +69,24 @@ namespace Simulator{
         // shaders
         config["Pipeline"]["Shaders"]["VertexShaderPath"] = m_Store.vertexShaderPath;
         config["Pipeline"]["Shaders"]["FragmentShaderPath"] = m_Store.fragmentShaderPath;
+
+        // vertex buffer
+        for (const auto& vertex: m_Store.vertices){
+            nlohmann::json vertexJson;
+            for (uint32 attrIndex = 0; attrIndex < attributes.size(); attrIndex++){
+                nlohmann::json attributeJson;
+                for (uint32 componentIndex = 0; componentIndex < attributes[attrIndex].componentCount; componentIndex++){
+                    attributeJson.push_back(vertex[attrIndex][componentIndex]);
+                }
+                vertexJson[attributes[attrIndex].name] = attributeJson;
+            }
+            config["Pipeline"]["VertexBuffer"].push_back(vertexJson);
+        }
+
+        // index buffer
+        for (const auto& index: m_Store.indices){
+            config["Pipeline"]["IndexBuffer"].push_back(index);
+        }
 
         // save to file
         std::ofstream file(path);
@@ -87,19 +119,54 @@ namespace Simulator{
         m_Store.fragmentShaderPath = config["Pipeline"]["Shaders"]["FragmentShaderPath"].get<std::string>();
         loadShaders(m_Store.vertexShaderPath, m_Store.fragmentShaderPath);
 
+        // vertex buffer
+        const auto& vertices = config["Pipeline"]["VertexBuffer"];
+        const auto& loadedAttributes = vertexLayout->getAttributes();
+        for (const auto& vertex: vertices){
+            UIVertex uiVertex;
+            for (const auto& attr: loadedAttributes){
+                const auto& attribute = vertex[attr.name];
+                uiVertex.emplace_back(attr.componentCount);
+                for (uint32 componentIndex = 0; componentIndex < attr.componentCount; componentIndex++){
+                    uiVertex.back()[componentIndex] = attribute[componentIndex];
+                }
+            }
+            m_Store.vertices.push_back(uiVertex);
+        }
+
+        // index buffer
+        const auto& indices = config["Pipeline"]["IndexBuffer"];
+        for (const auto& index: indices){
+            m_Store.indices.push_back(index);
+        }
+        loadMesh();
+
     }
 
     void Renderer::loadShaders(const std::string &vertexShaderPath, const std::string &fragmentShaderPath) {
-        if (vertexShaderPath.empty() || fragmentShaderPath.empty()){
-            return;
-        }
-        shader = m_Context->createShader(vertexShaderPath, fragmentShaderPath);
-
         auto pVertexShaderPanel = dynamic_cast<ShaderPanel*>(m_Store.vertexShaderPanel.get());
         auto pFragmentShaderPanel = dynamic_cast<ShaderPanel*>(m_Store.fragmentShaderPanel.get());
 
         pVertexShaderPanel->loadShader(vertexShaderPath);
         pFragmentShaderPanel->loadShader(fragmentShaderPath);
+
+        if (vertexShaderPath.empty() || fragmentShaderPath.empty()){
+            return;
+        }
+        m_Shader = m_Context->createShader(vertexShaderPath, fragmentShaderPath);
+    }
+
+    void Renderer::loadMesh() {
+        std::vector<float> vertices;
+        for (const auto& vertex : m_Store.vertices){
+            for (const auto& attribute : vertex){
+                for (const auto& component : attribute){
+                    vertices.emplace_back(component);
+                }
+            }
+        }
+        m_VertexBuffer = m_Context->createVertexBuffer(vertexLayout, vertices.data(), vertices.size() * sizeof(UIVertex));
+        m_IndexBuffer = m_Context->createIndexBuffer(m_Store.indices.data(), m_Store.indices.size());
     }
 
 }

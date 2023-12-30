@@ -73,7 +73,56 @@ namespace Simulator{
     }
 
     void PipelinePanel::drawMesh() {
+        ImGui::Text("Vertices");
+        const auto& attributes = m_Store.renderer->vertexLayout->getAttributes();
+        if (attributes.size() > 0){
+            ImGui::Columns(attributes.size(), "Vertices");
+            ImGui::Separator();
+            for (const auto& attribute : attributes){
+                ImGui::Text(attribute.name.c_str()); ImGui::NextColumn();
+            }
+            ImGui::Separator();
+            uint64 i = 0;
+            for (auto& vertex : m_Store.vertices){
+                for (auto& attribute : vertex){
+                    const std::string ID = "##" + std::to_string(i++);
+                    switch (attribute.size()) {
+                        case 1: ImGui::InputFloat(ID.c_str(), &attribute[0]); break;
+                        case 2: ImGui::InputFloat2(ID.c_str(), attribute.data()); break;
+                        case 3: ImGui::InputFloat3(ID.c_str(), attribute.data()); break;
+                        case 4: ImGui::InputFloat4(ID.c_str(), attribute.data()); break;
+                        default: break;
+                    }
+                    ImGui::NextColumn();
+                }
+            }
+            ImGui::Separator();
+            ImGui::Columns(1);
 
+            if (ImGui::Button("Add Vertex")){
+                UIVertex vertex;
+                for (const auto& attribute : attributes){
+                    vertex.emplace_back(attribute.componentCount);
+                }
+                m_Store.vertices.emplace_back(vertex);
+            }
+
+            ImGui::Separator();
+            ImGui::Text("Indices");
+            for (auto& index : m_Store.indices){
+                const std::string ID = "##Index" + std::to_string(i++);
+                ImGui::InputInt(ID.c_str(), (int*)&index);
+            }
+            if (ImGui::Button("Add Index")){
+                m_Store.indices.emplace_back();
+            }
+
+            ImGui::Separator();
+            if (ImGui::Button("Load Mesh")){
+                m_Store.renderer->loadMesh();
+                printf("Loaded Mesh\n");
+            }
+        }
     }
 
     void PipelinePanel::drawShaders() {
@@ -89,8 +138,11 @@ namespace Simulator{
         ImGui::SameLine();
         ImGui::Text(m_Store.fragmentShaderPath.c_str());
 
-        if (ImGui::Button("Load")){
+        ImGui::Separator();
+
+        if (ImGui::Button("Load Shader")){
             m_Store.renderer->loadShaders(m_Store.vertexShaderPath, m_Store.fragmentShaderPath);
+            printf("Loaded Shaders\n");
         }
     }
 

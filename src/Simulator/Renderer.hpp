@@ -11,7 +11,7 @@ namespace Simulator{
 
         ~Renderer() = default;
 
-        void draw();
+        void draw() const;
 
         void savePipelineConfig(const std::string& path);
 
@@ -19,10 +19,11 @@ namespace Simulator{
 
         void loadShaders(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
 
+        void loadMesh();
+
     public:
         UP<VertexLayout> vertexLayout;
         UP<FrameBuffer> frameBuffer;
-        UP<Shader> shader;
 
     private:
         SimulatorStore& m_Store;
@@ -32,7 +33,9 @@ namespace Simulator{
 
         UP<Context> m_Context;
 
-
+        UP<Shader> m_Shader;
+        UP<VertexBuffer> m_VertexBuffer;
+        UP<IndexBuffer> m_IndexBuffer;
     };
 
 }
