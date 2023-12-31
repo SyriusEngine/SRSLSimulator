@@ -51,8 +51,6 @@ namespace Simulator{
         std::string compiledVertexShaderPath;
         std::string compiledFragmentShaderPath;
 
-        bool m_IsRendering;
-
     };
 
 }

@@ -9,8 +9,7 @@ namespace Simulator{
     navBar(nullptr),
     pipelinePanel(nullptr),
     renderer(nullptr),
-    renderTargetPanel(nullptr),
-    m_IsRendering(false){
+    renderTargetPanel(nullptr){
 
     }
 

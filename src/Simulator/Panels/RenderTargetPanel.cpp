@@ -1,10 +1,10 @@
 #include "RenderTargetPanel.hpp"
-#include <processthreadsapi.h>
 
 namespace Simulator{
 
     RenderTargetPanel::RenderTargetPanel(SimulatorStore &store):
-    Panel(store, "RenderTarget", 2 * store.window->getWidth() / 5, store.window->getHeight() - store.navBar->panelHeight, store.pipelinePanel->panelWidth, store.navBar->panelHeight){
+    Panel(store, "RenderTarget", 2 * store.window->getWidth() / 5, store.window->getHeight() - store.navBar->panelHeight, store.pipelinePanel->panelWidth, store.navBar->panelHeight),
+    m_Debugger(nullptr){
 
         Syrius::Texture2DDesc desc;
         desc.width = DRAW_WIDTH;
@@ -22,6 +22,21 @@ namespace Simulator{
         if (ImGui::Button("Render")){
             m_Store.renderer->draw();
         }
+        ImGui::SameLine();
+        if (ImGui::Button("Clear")){
+            m_Store.renderer->frameBuffer->getColorAttachment(0)->clear();
+        }
+        ImGui::SameLine();
+        if (m_Debugger == nullptr){
+            if (ImGui::Button("Debug")){
+                m_Debugger = createUP<Debugger>();
+            }
+        }
+        else{
+            if (ImGui::Button("Stop Debugging")){
+                m_Debugger.reset();
+            }
+        }
 
         const auto& data = m_Store.renderer->frameBuffer->getColorAttachment(0)->getData();
         m_RenderTargetView->setData(data.data(), 0, 0, DRAW_WIDTH, DRAW_HEIGHT);
@@ -29,27 +44,6 @@ namespace Simulator{
 
         if (ImGui::Button("Save")){
             showSaveDialog = true;
-        }
-
-        static uint64 processID = GetCurrentProcessId();
-        ImGui::Text("Process ID: %llu", processID);
-
-        if (m_Store.renderer->shader != nullptr){
-            const auto& debugInfo = m_Store.renderer->shader->getDebugInfo();
-            ImGui::Text("Vertex Shader Source:");
-            ImGui::Text(debugInfo.vertexShaderSource.c_str());
-            ImGui::Text("Vertex Shader Cpp Source:");
-            ImGui::Text(debugInfo.vertexShaderCppSource.c_str());
-            ImGui::Text("Vertex Shader Line Info:");
-            ImGui::Text(debugInfo.vertexShaderLineInfo.c_str());
-
-            ImGui::Text("Fragment Shader Source:");
-            ImGui::Text(debugInfo.fragmentShaderSource.c_str());
-            ImGui::Text("Fragment Shader Cpp Source:");
-            ImGui::Text(debugInfo.fragmentShaderCppSource.c_str());
-            ImGui::Text("Fragment Shader Line Info:");
-            ImGui::Text(debugInfo.fragmentShaderLineInfo.c_str());
-
         }
 
         onEndDraw();
@@ -71,4 +65,5 @@ namespace Simulator{
             ImGui::End();
         }
     }
+
 }

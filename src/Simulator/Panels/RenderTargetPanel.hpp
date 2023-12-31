@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Panel.hpp"
+#include "../Debugger.hpp"
 
 namespace Simulator{
 
@@ -14,6 +15,8 @@ namespace Simulator{
 
     private:
         Syrius::ResourceView<Syrius::Texture2D> m_RenderTargetView;
+
+        UP<Debugger> m_Debugger;
 
 
 

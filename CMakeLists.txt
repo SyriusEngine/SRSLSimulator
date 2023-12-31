@@ -68,10 +68,15 @@ include_directories(./Dependencies/json/include/)
 set(SIMULATOR_SRC
     src/Simulator/Simulator.cpp
     src/Simulator/SimulatorStore.cpp
+    src/Simulator/Renderer.cpp
+    src/Simulator/Worker.cpp
+    src/Simulator/Debugger.cpp
+
     src/Simulator/Panels/Panel.cpp
     src/Simulator/Panels/NavBar.cpp
     src/Simulator/Panels/PipelinePanel.cpp
-    src/Simulator/Renderer.cpp src/Simulator/Renderer.hpp src/Simulator/Panels/RenderTargetPanel.cpp src/Simulator/Panels/RenderTargetPanel.hpp src/Simulator/Panels/ShaderPanel.cpp src/Simulator/Panels/ShaderPanel.hpp src/Simulator/Worker.cpp src/Simulator/Worker.hpp)
+    src/Simulator/Panels/RenderTargetPanel.cpp
+    src/Simulator/Panels/ShaderPanel.cpp)
 
 add_executable(SrslSimulator main.cpp ${SIMULATOR_SRC})
 target_link_libraries(SrslSimulator -lSrslAPI -lSyriusCore)

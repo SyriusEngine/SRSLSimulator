@@ -9,7 +9,7 @@ class Worker{
 public:
     Worker();
 
-    ~Worker();
+    virtual ~Worker();
 
     void stop();
 
