@@ -101,42 +101,12 @@ namespace SrslAPI{
         }
         const auto& indices = m_IndexBuffer->getData();
 
-        auto rasterizeThread = [&](uint32 start, uint32 end){
-            for (uint64_t i = start; i < end; i += 3){
-                auto& v0 = data.vertices[indices[i]];
-                auto& v1 = data.vertices[indices[i + 1]];
-                auto& v2 = data.vertices[indices[i + 2]];
+        for (uint32_t i = 0; i < m_IndexBuffer->getCount(); i += 3){
+            auto& v0 = data.vertices[indices[i]];
+            auto& v1 = data.vertices[indices[i + 1]];
+            auto& v2 = data.vertices[indices[i + 2]];
 
-                drawTriangle(v0, v1, v2);
-            }
-        };
-
-        const auto triangleCount = m_IndexBuffer->getCount() / 3;
-        const auto threadCount = std::thread::hardware_concurrency();
-
-        std::vector<std::thread> threads;
-        threads.reserve(threadCount);
-
-        if (triangleCount < threadCount){
-            for (uint32 i = 0; i < triangleCount; i++){
-                threads.emplace_back(rasterizeThread, i * 3, i * 3 + 3);
-            }
-        }
-        else{
-            // equally divide the triangles between the threads
-            std::cerr << "Drawing more triangles than threads, verify thread division code in case of artifacts" << std::endl;
-            const auto trianglesPerThread = triangleCount / threadCount;
-            const auto trianglesLeft = triangleCount % threadCount;
-
-            for (uint32_t i = 0; i < threadCount; i++){
-                const auto start = i * trianglesPerThread * 3;
-                const auto end = start + trianglesPerThread * 3 + (i == threadCount - 1 ? trianglesLeft * 3 : 0);
-                threads.emplace_back(rasterizeThread, start, end);
-            }
-        }
-
-        for (auto& thread: threads){
-            thread.join();
+            drawTriangle(v0, v1, v2);
         }
     }
 

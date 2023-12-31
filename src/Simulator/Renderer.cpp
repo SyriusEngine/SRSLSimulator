@@ -8,7 +8,8 @@ namespace Simulator{
     m_Store(store),
     shader(nullptr),
     m_VertexBuffer(nullptr),
-    m_IndexBuffer(nullptr){
+    m_IndexBuffer(nullptr),
+    m_RenderThread(){
         m_Context = createContext();
 
         m_Width = m_Store.config["Simulation"]["SimulationWidth"].getOrDefault<uint32>(DRAW_WIDTH);
@@ -33,21 +34,23 @@ namespace Simulator{
         vertexLayout = m_Context->createVertexLayout();
     }
 
-    void Renderer::draw() const {
-        frameBuffer->getColorAttachment(0)->clear();
+    void Renderer::draw() {
+        m_RenderThread.addTask([this](){
+            frameBuffer->getColorAttachment(0)->clear();
 
-        if (shader != nullptr && m_VertexBuffer != nullptr && m_IndexBuffer != nullptr){
-            frameBuffer->bind();
+            if (shader != nullptr && m_VertexBuffer != nullptr && m_IndexBuffer != nullptr){
+                frameBuffer->bind();
 
-            shader->bind();
-            m_VertexBuffer->bind();
-            m_IndexBuffer->bind();
-            for (const auto& texture: m_Textures){
-                texture.texture->bind(texture.slot);
+                shader->bind();
+                m_VertexBuffer->bind();
+                m_IndexBuffer->bind();
+                for (const auto& texture: m_Textures){
+                    texture.texture->bind(texture.slot);
+                }
+
+                m_Context->draw();
             }
-
-            m_Context->draw();
-        }
+        });
     }
 
     void Renderer::savePipelineConfig(const std::string &path) {
@@ -190,7 +193,9 @@ namespace Simulator{
                 std::string nr;
                 std::vector<uint32> cppLines;
                 while (std::getline(ss, nr, ' ')){
-                    cppLines.emplace_back(std::stoi(nr));
+                    if (!nr.empty()){
+                        cppLines.emplace_back(std::stoi(nr));
+                    }
                 }
                 lineInfo.insert({srslLine, cppLines});
             }

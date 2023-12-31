@@ -2,6 +2,7 @@
 
 #include "SimulatorInclude.hpp"
 #include "SimulatorStore.hpp"
+#include "Worker.hpp"
 
 namespace Simulator{
 
@@ -16,7 +17,7 @@ namespace Simulator{
 
         ~Renderer() = default;
 
-        void draw() const;
+        void draw();
 
         void savePipelineConfig(const std::string& path);
 
@@ -35,6 +36,8 @@ namespace Simulator{
 
     private:
         SimulatorStore& m_Store;
+
+        Worker m_RenderThread;
 
         uint32 m_Width;
         uint32 m_Height;
