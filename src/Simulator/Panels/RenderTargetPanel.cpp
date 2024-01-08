@@ -1,4 +1,5 @@
 #include "RenderTargetPanel.hpp"
+#include "ShaderPanel.hpp"
 
 namespace Simulator{
 
@@ -30,6 +31,27 @@ namespace Simulator{
         if (m_Debugger == nullptr){
             if (ImGui::Button("Debug")){
                 m_Debugger = createUP<Debugger>();
+
+                auto vsPanel = dynamic_cast<ShaderPanel*>(m_Store.vertexShaderPanel.get());
+                auto fsPanel = dynamic_cast<ShaderPanel*>(m_Store.fragmentShaderPanel.get());
+
+                auto vsBreaks = vsPanel->getSelectedLines();
+                auto fsBreaks = fsPanel->getSelectedLines();
+
+                std::string vsFileLoc = "CompiledShaders/comp-vs.cpp";
+                std::string fsFileLoc = "CompiledShaders/comp-fs.cpp";
+
+                // first convert our SRSL line number to C++ line number
+                if (!vsBreaks.empty()){
+                    uint32 cppLine = m_Store.vertexShaderLineInfo[vsBreaks[0]][0];
+
+                    // use absolute path to instruct GDB to break at the line
+                    std::filesystem::path fullPath = std::filesystem::absolute(vsFileLoc);
+                    std::string cmdBreakVs = "break " + fullPath.string() + ":" + std::to_string(cppLine);
+
+                    // instruct GDB to break at the line
+                    m_Debugger->sendCommand(cmdBreakVs);
+                }
             }
         }
         else{

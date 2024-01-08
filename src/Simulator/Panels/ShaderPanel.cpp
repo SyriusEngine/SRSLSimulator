@@ -50,4 +50,8 @@ namespace Simulator{
             m_ShaderSource.push_back(line);
         }
     }
+
+    const std::vector<uint32> &ShaderPanel::getSelectedLines() const {
+        return m_SelectedLines;
+    }
 }
