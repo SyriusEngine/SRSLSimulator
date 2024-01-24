@@ -25,7 +25,7 @@ namespace Simulator{
     public:
         EasyIni::Configuration config;
 
-        Syrius::Resource<Syrius::Window> window;
+        Syrius::Resource<Syrius::SyriusWindow> window;
         Syrius::ResourceView<Syrius::Context> srContext;
 
         UP<Renderer> renderer;

@@ -15,11 +15,17 @@ namespace Simulator{
 
         template<typename T, typename... Args>
         void addLayer(Args&&... args){
-            m_Renderer.addLayer<T>(std::forward<Args>(args)...);
+            m_Renderer->addLayer<T>(std::forward<Args>(args)...);
         }
 
     private:
-        Renderer m_Renderer;
+
+        void renderTargetPanel();
+
+        void controlPanel();
+
+    private:
+        UP<Renderer> m_Renderer;
         EasyIni::Configuration m_Config;
 
         // display stuff

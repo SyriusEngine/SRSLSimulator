@@ -12,15 +12,17 @@ namespace SrslAPI{
     m_ShaderModule(nullptr),
     m_VertexShaderEntry(nullptr),
     m_FragmentShaderEntry(nullptr){
+        SIM_START_TIME("Shader::Compile")
         compileSrsl(vertexShader, fragmentShader);
         compileCpp();
+        SIM_STOP_TIME("Shader::Compile")
     }
 
     ShaderImpl::~ShaderImpl() {
         unloadExecutable();
-//        if (std::filesystem::exists(m_OutputPath)) {
-//            std::filesystem::remove_all(m_OutputPath);
-//        }
+        if (std::filesystem::exists(m_OutputPath)) {
+            std::filesystem::remove_all(m_OutputPath);
+        }
     }
 
     void ShaderImpl::bind() {

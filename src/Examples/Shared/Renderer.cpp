@@ -8,16 +8,15 @@ namespace Simulator{
     m_RenderThread(){
         auto fbWidth = m_Config["Renderer"]["FrameBufferWidth"].getOrDefault<uint32>(DEF_FRAMEBUFFER_WIDTH);
         auto fbHeight = m_Config["Renderer"]["FrameBufferHeight"].getOrDefault<uint32>(DEF_FRAMEBUFFER_HEIGHT);
-        auto clearColor = m_Config["Renderer"]["ClearColor"].getVectorOrDefault<float>({0.2f, 0.3f, 0.8f, 1.0f});
 
         ColorAttachmentDesc caDesc;
         caDesc.width = fbWidth;
         caDesc.height = fbHeight;
         caDesc.channelCount = 4;
-        caDesc.clearColor[0] = clearColor[0];
-        caDesc.clearColor[1] = clearColor[1];
-        caDesc.clearColor[2] = clearColor[2];
-        caDesc.clearColor[3] = clearColor[3];
+        caDesc.clearColor[0] = m_Config["Renderer"]["ClearColorR"].getOrDefault<float>(0.2f);
+        caDesc.clearColor[1] = m_Config["Renderer"]["ClearColorG"].getOrDefault<float>(0.3f);
+        caDesc.clearColor[2] = m_Config["Renderer"]["ClearColorB"].getOrDefault<float>(0.8f);
+        caDesc.clearColor[3] = m_Config["Renderer"]["ClearColorA"].getOrDefault<float>(1.0f);
 
         FrameBufferLayout fbLayout;
         fbLayout.setViewport(fbWidth, fbHeight, 0, 0);
@@ -25,6 +24,18 @@ namespace Simulator{
 
         m_FrameBuffer = m_Context->createFrameBuffer(fbLayout);
 
+    }
+
+    Renderer::~Renderer() {
+        m_RenderThread.stop();
+
+        m_Config["Renderer"]["FrameBufferWidth"] = getFrameBufferWidth();
+        m_Config["Renderer"]["FrameBufferHeight"] = getFrameBufferHeight();
+        auto clearColor = m_FrameBuffer->getColorAttachment(0)->getClearColor();
+        m_Config["Renderer"]["ClearColorR"] = clearColor[0];
+        m_Config["Renderer"]["ClearColorG"] = clearColor[1];
+        m_Config["Renderer"]["ClearColorB"] = clearColor[2];
+        m_Config["Renderer"]["ClearColorA"] = clearColor[3];
     }
 
     void Renderer::render() {
@@ -52,5 +63,19 @@ namespace Simulator{
 
     void Renderer::clear() {
         m_FrameBuffer->getColorAttachment(0)->clear();
+    }
+
+    void Renderer::save(const std::string &path) {
+        m_FrameBuffer->getColorAttachment(0)->save(path);
+    }
+
+    void Renderer::renderImGui() {
+        for (auto& layer: m_Layers){
+            layer->onImGui();
+        }
+    }
+
+    float *Renderer::getClearColor() {
+        return m_FrameBuffer->getColorAttachment(0)->getClearColor();
     }
 }

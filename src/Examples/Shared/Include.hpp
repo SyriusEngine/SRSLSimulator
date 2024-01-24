@@ -18,4 +18,23 @@
 namespace Simulator{
 
     using namespace SrslAPI;
+
+    struct Vertex{
+        glm::vec3 position;
+        glm::vec3 color;
+        glm::vec3 normal;
+        glm::vec2 texCoord;
+    };
+
+    static Vertex s_RectangleVertices[] = {
+        {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
+        {{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
+        {{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+        {{-0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 0.f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}}
+    };
+
+    static uint32 s_RectangleIndices[] = {
+        0, 1, 2,
+        2, 3, 0
+    };
 }

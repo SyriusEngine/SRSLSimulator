@@ -6,14 +6,17 @@ namespace Simulator{
 
     class Layer{
     public:
-        explicit Layer(UP<Context>& context): m_Context(context){}
+        explicit Layer(UP<Context>& context);
 
         virtual ~Layer() = default;
 
         virtual void onRender() = 0;
 
+        virtual void onImGui() = 0;
+
     protected:
         UP<Context>& m_Context;
+        UP<VertexLayout> m_VertexLayout;
     };
 
 }
