@@ -86,3 +86,15 @@ add_dependencies(SrslSimulator CopyDLL)
 add_dependencies(SrslSimulator SrslAPI)
 add_dependencies(SrslSimulator SyriusCore)
 
+set(EXAMPLES_SRC
+    src/Examples/Shared/Worker.cpp
+    src/Examples/Shared/Renderer.cpp
+    src/Examples/Shared/Display.cpp src/Examples/Shared/Display.hpp)
+
+add_executable(SRSLExamples ${EXAMPLES_SRC} ExampleMain.cpp)
+target_link_libraries(SRSLExamples -lSrslAPI -lSyriusCore)
+
+add_dependencies(SRSLExamples CopyDLL)
+add_dependencies(SRSLExamples SrslAPI)
+add_dependencies(SRSLExamples SyriusCore)
+
