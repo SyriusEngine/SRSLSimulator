@@ -56,6 +56,7 @@ add_library(SrslAPI SHARED ${SRSL_GRAPHICS_API_SRC})
 target_link_libraries(SrslAPI -lSrslCompiler)
 
 add_dependencies(SrslAPI CopyDLL)
+add_dependencies(SrslAPI SrslCompiler)
 
 
 include_directories(./include/)
@@ -80,4 +81,8 @@ set(SIMULATOR_SRC
 
 add_executable(SrslSimulator main.cpp ${SIMULATOR_SRC})
 target_link_libraries(SrslSimulator -lSrslAPI -lSyriusCore)
+
+add_dependencies(SrslSimulator CopyDLL)
+add_dependencies(SrslSimulator SrslAPI)
+add_dependencies(SrslSimulator SyriusCore)
 
