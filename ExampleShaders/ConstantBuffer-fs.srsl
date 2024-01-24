@@ -16,11 +16,13 @@ Texture2D(slot = 1) instaLogo;
 Sampler(slot = 0) sampler0;
 
 ConstantBuffer(slot = 1) MixData{
-    float4 mixAmount;
+    float mixAmount;
+    float texOffset;
+    float2 padding;
 };
 
 void main() {
-    float4 tAF = sampleTexture(awesomeFace, sampler0, fsIn.texCoords);
+    float4 tAF = sampleTexture(awesomeFace, sampler0, fsIn.texCoords * MixData.texOffset);
     float4 tIL = sampleTexture(instaLogo, sampler0, fsIn.texCoords);
     float4 combined = mix(tAF, tIL, MixData.mixAmount);
     if (combined.a < 0.1f) {

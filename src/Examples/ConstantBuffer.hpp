@@ -10,7 +10,8 @@ namespace Simulator{
 
     struct MixData{
         float mix = 0.5f;
-        float padding[3]{};
+        float texOffset = 1.0f;
+        float padding[2]{};
     };
 
     class ConstantBufferLayer : public Layer{

@@ -88,6 +88,9 @@ namespace Simulator{
         if (ImGui::SliderFloat("Mix", &m_MixDataStruct.mix, 0.0f, 1.0f)){
             m_MixData->setData(&m_MixDataStruct, sizeof(MixData));
         }
+        if (ImGui::SliderFloat("Texture Count", &m_MixDataStruct.texOffset, 0.0f, 50.0f, "%.0f")){
+            m_MixData->setData(&m_MixDataStruct, sizeof(MixData));
+        }
 
     }
 }
