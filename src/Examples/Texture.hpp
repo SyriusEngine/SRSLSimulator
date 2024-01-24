@@ -4,9 +4,9 @@
 
 namespace Simulator{
 
-    class InterpolationLayer : public Layer{
+    class TextureLayer : public Layer{
     public:
-        explicit InterpolationLayer(UP<Context>& context);
+        explicit TextureLayer(UP<Context>& context);
 
         void onRender() override;
 
@@ -15,7 +15,10 @@ namespace Simulator{
     private:
         UP<VertexBuffer> m_VertexBuffer;
         UP<IndexBuffer> m_IndexBuffer;
+        UP<Texture2D> m_Texture;
         UP<Shader> m_Shader;
+
+
     };
 
 }

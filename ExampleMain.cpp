@@ -1,5 +1,7 @@
 #include "src/Examples/Shared/Display.hpp"
 #include "src/Examples/Interpolation.hpp"
+#include "src/Examples/Texture.hpp"
+#include "src/Examples/MultipleTextures.hpp"
 
 template<typename T>
 void runTest(const std::string& configName){
@@ -16,6 +18,8 @@ void runTest(const std::string& configName){
 
 void runAll(const std::string& configName){
     runTest<Simulator::InterpolationLayer>(configName);
+    runTest<Simulator::TextureLayer>(configName);
+    runTest<Simulator::MultipleTexturesLayer>(configName);
 }
 
 int main(int argc, char** argv){
@@ -29,6 +33,10 @@ int main(int argc, char** argv){
             std::string arg = argv[i];
             if (arg == "Interpolation"){
                 runTest<Simulator::InterpolationLayer>(configName);
+            } else if (arg == "Texture"){
+                runTest<Simulator::TextureLayer>(configName);
+            } else if (arg == "MultipleTextures"){
+                runTest<Simulator::MultipleTexturesLayer>(configName);
             } else if (arg == "All"){
                 runAll(configName);
             }

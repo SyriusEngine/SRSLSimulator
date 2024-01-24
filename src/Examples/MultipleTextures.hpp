@@ -4,9 +4,9 @@
 
 namespace Simulator{
 
-    class InterpolationLayer : public Layer{
+    class MultipleTexturesLayer : public Layer{
     public:
-        explicit InterpolationLayer(UP<Context>& context);
+        explicit MultipleTexturesLayer(UP<Context>& context);
 
         void onRender() override;
 
@@ -15,6 +15,8 @@ namespace Simulator{
     private:
         UP<VertexBuffer> m_VertexBuffer;
         UP<IndexBuffer> m_IndexBuffer;
+        UP<Texture2D> m_AwesomeFace;
+        UP<Texture2D> m_InstagramLogo;
         UP<Shader> m_Shader;
     };
 
