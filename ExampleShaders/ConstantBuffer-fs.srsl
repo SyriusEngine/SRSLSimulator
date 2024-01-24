@@ -1,0 +1,30 @@
+ShaderType = Fragment;
+
+Input fsIn{
+    float4 position: SRV_POSITION;
+    float4 color: Color;
+    float4 texCoords: TexCoord;
+};
+
+Output fsOut{
+    float4 color: SRV_TARGET_0;
+};
+
+Texture2D(slot = 0) awesomeFace;
+Texture2D(slot = 1) instaLogo;
+
+Sampler(slot = 0) sampler0;
+
+ConstantBuffer(slot = 1) MixData{
+    float4 mixAmount;
+};
+
+void main() {
+    float4 tAF = sampleTexture(awesomeFace, sampler0, fsIn.texCoords);
+    float4 tIL = sampleTexture(instaLogo, sampler0, fsIn.texCoords);
+    float4 combined = mix(tAF, tIL, MixData.mixAmount);
+    if (combined.a < 0.1f) {
+        discard;
+    }
+    fsOut.color = combined;
+}

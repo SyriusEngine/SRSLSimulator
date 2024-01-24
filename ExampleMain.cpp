@@ -2,6 +2,7 @@
 #include "src/Examples/Interpolation.hpp"
 #include "src/Examples/Texture.hpp"
 #include "src/Examples/MultipleTextures.hpp"
+#include "src/Examples/ConstantBuffer.hpp"
 
 template<typename T>
 void runTest(const std::string& configName){
@@ -20,6 +21,7 @@ void runAll(const std::string& configName){
     runTest<Simulator::InterpolationLayer>(configName);
     runTest<Simulator::TextureLayer>(configName);
     runTest<Simulator::MultipleTexturesLayer>(configName);
+    runTest<Simulator::ConstantBufferLayer>(configName);
 }
 
 int main(int argc, char** argv){
@@ -37,6 +39,8 @@ int main(int argc, char** argv){
                 runTest<Simulator::TextureLayer>(configName);
             } else if (arg == "MultipleTextures"){
                 runTest<Simulator::MultipleTexturesLayer>(configName);
+            } else if (arg == "ConstantBuffer"){
+                runTest<Simulator::ConstantBufferLayer>(configName);
             } else if (arg == "All"){
                 runAll(configName);
             }

@@ -1,4 +1,5 @@
 #include "Display.hpp"
+#include <processthreadsapi.h>
 
 namespace Simulator{
 
@@ -104,6 +105,10 @@ namespace Simulator{
         ImGui::SetNextWindowPos(ImVec2(m_Renderer->getFrameBufferWidth() + 15, 0));
         ImGui::SetNextWindowSize(ImVec2(m_Window->getWidth() - m_Renderer->getFrameBufferWidth() - 15, m_Window->getHeight()));
         ImGui::Begin("Control Panel", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+
+        static uint64 processID = GetCurrentProcessId();
+        ImGui::Text("Process ID: %llu", processID);
+        ImGui::NewLine();
 
         m_Renderer->renderImGui();
 //
