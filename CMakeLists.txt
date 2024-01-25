@@ -89,7 +89,14 @@ add_dependencies(SrslSimulator SyriusCore)
 set(EXAMPLES_SRC
     src/Examples/Shared/Worker.cpp
     src/Examples/Shared/Renderer.cpp
-    src/Examples/Shared/Display.cpp src/Examples/Shared/Display.hpp src/Examples/Interpolation.cpp src/Examples/Interpolation.hpp src/Examples/Shared/Layer.cpp src/Examples/Texture.cpp src/Examples/Texture.hpp src/Examples/MultipleTextures.cpp src/Examples/MultipleTextures.hpp src/Examples/ConstantBuffer.cpp src/Examples/ConstantBuffer.hpp)
+    src/Examples/Shared/Display.cpp
+    src/Examples/Interpolation.cpp
+    src/Examples/Shared/Layer.cpp
+    src/Examples/Texture.cpp
+    src/Examples/MultipleTextures.cpp
+    src/Examples/ConstantBuffer.cpp
+    src/Examples/MVP.cpp
+    )
 
 add_executable(SRSLExamples ${EXAMPLES_SRC} ExampleMain.cpp)
 target_link_libraries(SRSLExamples -lSrslAPI -lSyriusCore)

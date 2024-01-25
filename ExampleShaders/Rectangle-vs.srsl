@@ -1,7 +1,7 @@
 ShaderType = Vertex;
 
 Input vsIn{
-    float2 position: Position;
+    float3 position: Position;
     float3 color: Color;
     float3 normal: Normal;
     float2 texCoords: TexCoord;
@@ -14,7 +14,7 @@ Output vsOut{
 };
 
 void main(){
-    float4 extPos = float4(vsIn.position, 0.0f, 1.0f);
+    float4 extPos = float4(vsIn.position, 1.0f);
     vsOut.position = extPos;
     vsOut.color = float4(vsIn.color, 1.0);
     vsOut.texCoords = float4(vsIn.texCoords, 0.0f, 1.0f);

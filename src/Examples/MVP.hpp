@@ -4,9 +4,9 @@
 
 namespace Simulator{
 
-    class ConstantBufferLayer : public Layer{
+    class MVPLayer : public Layer{
     public:
-        explicit ConstantBufferLayer(UP<Context>& context);
+        explicit MVPLayer(UP<Context>& context);
 
         void onRender() override;
 
@@ -16,13 +16,14 @@ namespace Simulator{
         UP<VertexBuffer> m_VertexBuffer;
         UP<IndexBuffer> m_IndexBuffer;
 
-        UP<Texture2D> m_AwesomeFace;
-        UP<Texture2D> m_InstagramLogo;
-
-        UP<ConstantBuffer> m_MixData;
-        MixData m_MixDataStruct;
         UP<ConstantBuffer> m_ModelData;
         ModelData m_ModelDataStruct;
+        UP<ConstantBuffer> m_ProjectionData;
+        ProjectionData m_ProjectionDataStruct;
+        UP<ConstantBuffer> m_ViewData;
+        ViewData m_ViewDataStruct;
+        Camera m_Camera;
+
 
         UP<Shader> m_Shader;
 

@@ -1,0 +1,15 @@
+ShaderType = Fragment;
+
+Input fsIn{
+    float4 position: SRV_POSITION;
+    float4 color: Color;
+    float4 texCoords: TexCoord;
+};
+
+Output fsOut{
+    float4 color: SRV_TARGET_0;
+};
+
+void main() {
+    fsOut.color = fsIn.color;
+}

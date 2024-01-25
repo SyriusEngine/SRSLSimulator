@@ -1,0 +1,33 @@
+ShaderType = Vertex;
+
+Input vsIn{
+    float3 position: Position;
+    float3 color: Color;
+    float3 normal: Normal;
+    float2 texCoords: TexCoord;
+};
+
+Output vsOut{
+    float4 position: SRV_POSITION;
+    float4 color: Color;
+    float4 texCoords: TexCoord;
+};
+
+ConstantBuffer(slot = 0) ProjectionData {
+    float4x4 perspective;
+};
+
+ConstantBuffer(slot = 1) ViewData {
+    float4x4 view;
+};
+
+ConstantBuffer(slot = 2) ModelData {
+    float4x4 model;
+};
+
+void main(){
+    float4 extPos = float4(vsIn.position, 1.0f);
+    vsOut.position = ProjectionData.perspective * ViewData.view * ModelData.model * extPos;
+    vsOut.color = float4(vsIn.color, 1.0f);
+    vsOut.texCoords = float4(vsIn.texCoords, 0.0f, 0.0f);
+}
