@@ -20,7 +20,7 @@ namespace Simulator{
 
         m_Store.window->createImGuiContext();
 
-        m_Store.srContext->setClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+        m_Store.srContext->getDefaultFrameBuffer()->getColorAttachment(0)->setClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         m_Store.renderer = createUP<Renderer>(m_Store);
 
         setupPanels();
